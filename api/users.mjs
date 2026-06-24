@@ -1,4 +1,4 @@
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://bodwmontkooqrortcavs.supabase.co'
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 const AUTH_DOMAIN = 'classbank.local'
 
@@ -9,6 +9,10 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(204).end()
 
+  if (!SERVICE_ROLE_KEY) {
+    return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY not set in environment' })
+  }
+
   try {
     if (req.method === 'POST') {
       const { student_id, name, password, class_id } = req.body
@@ -16,20 +20,40 @@ export default async function handler(req, res) {
 
       const authRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${SERVICE_ROLE_KEY}`, apikey: SERVICE_ROLE_KEY, 'Content-Type': 'application/json' },
+        headers: {
+          Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+          apikey: SERVICE_ROLE_KEY,
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email, password, email_confirm: true }),
       })
       const authData = await authRes.json()
-      if (!authRes.ok) return res.status(400).json({ error: authData.msg || 'Failed to create user' })
+      if (!authRes.ok) {
+        return res.status(400).json({ error: authData.msg || 'Failed to create auth user' })
+      }
 
       const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${SERVICE_ROLE_KEY}`, apikey: SERVICE_ROLE_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-        body: JSON.stringify({ id: authData.id, student_id, name, role: 'student', class_id: class_id || null }),
+        headers: {
+          Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+          apikey: SERVICE_ROLE_KEY,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({
+          id: authData.id,
+          student_id,
+          name,
+          role: 'student',
+          class_id: class_id || null,
+        }),
       })
 
       if (!profileRes.ok) {
-        await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${authData.id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${SERVICE_ROLE_KEY}`, apikey: SERVICE_ROLE_KEY } })
+        await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${authData.id}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${SERVICE_ROLE_KEY}`, apikey: SERVICE_ROLE_KEY },
+        })
         return res.status(400).json({ error: 'Failed to create profile' })
       }
 
@@ -39,7 +63,10 @@ export default async function handler(req, res) {
     if (req.method === 'DELETE') {
       const id = req.query.id
       if (!id) return res.status(400).json({ error: 'Missing user id' })
-      await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${SERVICE_ROLE_KEY}`, apikey: SERVICE_ROLE_KEY } })
+      await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${SERVICE_ROLE_KEY}`, apikey: SERVICE_ROLE_KEY },
+      })
       return res.status(200).json({ ok: true })
     }
 
