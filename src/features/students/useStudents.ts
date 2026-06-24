@@ -20,7 +20,7 @@ export function useStudents(classId?: string | null) {
   useEffect(() => { fetch() }, [classId])
 
   async function create(studentId: string, name: string, password: string, passwordClassId?: string) {
-    const { id, error } = await adminCreateUser(studentId, name, password, passwordClassId ?? classId ?? null)
+    const { error } = await adminCreateUser(studentId, name, password, passwordClassId ?? classId ?? null)
     if (error) return error
     fetch()
     return null
