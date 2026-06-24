@@ -96,26 +96,35 @@ function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void 
   )
 }
 
-function MobileTopBar() {
+function MobileTopBar({ onSignOut }: { onSignOut: () => void }) {
   const { adminClasses, activeClassId, setActiveClassId } = useAuth()
 
   return (
     <div className="lg:hidden flex items-center justify-between px-4 py-3 bg-bg-card border-b border-border">
-      <div className="flex items-center gap-2">
-        <img src="/classBankLogo.png" alt="ClassBank" className="h-7 w-auto" />
-        <span className="font-semibold text-text">ClassBank</span>
+      <div className="flex items-center gap-2 min-w-0">
+        <img src="/classBankLogo.png" alt="ClassBank" className="h-7 w-auto shrink-0" />
+        <span className="font-semibold text-text truncate">ClassBank</span>
       </div>
-      {adminClasses.length > 0 && (
-        <select
-          value={activeClassId ?? ''}
-          onChange={(e) => setActiveClassId(e.target.value || null)}
-          className="rounded-btn border border-border bg-white px-2.5 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-600/30 max-w-[160px]"
+      <div className="flex items-center gap-2">
+        {adminClasses.length > 0 && (
+          <select
+            value={activeClassId ?? ''}
+            onChange={(e) => setActiveClassId(e.target.value || null)}
+            className="rounded-btn border border-border bg-white px-2.5 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-600/30 max-w-[140px]"
+          >
+            {adminClasses.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        )}
+        <button
+          onClick={onSignOut}
+          className="flex items-center justify-center size-9 rounded-btn text-secondary hover:bg-bg-elevated hover:text-text transition-colors cursor-pointer"
+          title="Sign Out"
         >
-          {adminClasses.map((c) => (
-            <option key={c.id} value={c.id}>{c.name}</option>
-          ))}
-        </select>
-      )}
+          <LogOut size={18} />
+        </button>
+      </div>
     </div>
   )
 }
@@ -124,7 +133,7 @@ export function AppShell({ role, onSignOut, children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-bg-main">
       <Sidebar role={role} onSignOut={onSignOut} />
-      <MobileTopBar />
+      <MobileTopBar onSignOut={onSignOut} />
       <main className="lg:ml-64 p-4 lg:p-8 pb-20 lg:pb-8">
         {children}
       </main>
