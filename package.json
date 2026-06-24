@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "node server/index.mjs",
+    "dev:all": "node -e \"const{spawn}=require('child_process');const s=spawn('node',['server/index.mjs'],{stdio:'inherit'});const v=spawn('npx',['vite'],{stdio:'inherit'});process.on('exit',()=>{s.kill();v.kill()})\"",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"

@@ -6,20 +6,24 @@ ALTER TABLE contributions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
 
--- Helper function: get current user's role (public schema, auth.uid comes from auth schema)
+-- Helper function: get current user's role
+-- SECURITY DEFINER to bypass RLS (prevents infinite recursion)
 CREATE OR REPLACE FUNCTION user_role()
 RETURNS user_role
 LANGUAGE SQL
 STABLE
+SECURITY DEFINER
 AS $$
   SELECT role FROM profiles WHERE id = auth.uid()
 $$;
 
 -- Helper function: get current user's class_id
+-- SECURITY DEFINER to bypass RLS (prevents infinite recursion)
 CREATE OR REPLACE FUNCTION user_class_id()
 RETURNS UUID
 LANGUAGE SQL
 STABLE
+SECURITY DEFINER
 AS $$
   SELECT class_id FROM profiles WHERE id = auth.uid()
 $$;

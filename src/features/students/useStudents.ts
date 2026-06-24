@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { AUTH_EMAIL_DOMAIN } from '../../lib/constants'
+import { adminCreateUser, adminDeleteUser } from '../../lib/admin-api'
 import type { Profile } from '../../lib/types'
 
 export function useStudents(classId?: string | null) {
@@ -20,26 +20,8 @@ export function useStudents(classId?: string | null) {
   useEffect(() => { fetch() }, [classId])
 
   async function create(studentId: string, name: string, password: string, passwordClassId?: string) {
-    const email = `${studentId}@${AUTH_EMAIL_DOMAIN}`
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true,
-    })
-    if (authError) return authError.message
-    if (!authData.user) return 'Failed to create user'
-
-    const { error: profileError } = await supabase.from('profiles').insert({
-      id: authData.user.id,
-      student_id: studentId,
-      name,
-      role: 'student',
-      class_id: passwordClassId ?? classId ?? null,
-    } as never)
-    if (profileError) {
-      await supabase.auth.admin.deleteUser(authData.user.id)
-      return profileError.message
-    }
+    const { id, error } = await adminCreateUser(studentId, name, password, passwordClassId ?? classId ?? null)
+    if (error) return error
     fetch()
     return null
   }
@@ -53,7 +35,7 @@ export function useStudents(classId?: string | null) {
   async function remove(id: string) {
     const { error } = await supabase.from('profiles').delete().eq('id', id)
     if (!error) {
-      await supabase.auth.admin.deleteUser(id)
+      await adminDeleteUser(id)
       fetch()
     }
     return error?.message ?? null
