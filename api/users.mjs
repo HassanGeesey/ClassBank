@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'POST') {
-      const { student_id, name, password, class_id } = req.body
+      const { student_id, name, password, class_id, role } = req.body
       const email = `${student_id}@${AUTH_DOMAIN}`
 
       const authRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
           id: authData.id,
           student_id,
           name,
-          role: 'student',
+          role: role || 'student',
           class_id: class_id || null,
         }),
       })
