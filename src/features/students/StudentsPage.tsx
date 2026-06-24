@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { supabase } from '../../lib/supabase'
 import { useAuth } from '../auth/AuthContext'
 import { Card, CardContent } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
@@ -12,12 +13,22 @@ import { useStudents } from './useStudents'
 import { Search, Plus, Pencil, Trash2 } from 'lucide-react'
 
 export function StudentsPage() {
-  const { activeClassId } = useAuth()
+  const { user, activeClassId } = useAuth()
+  const isSuperAdmin = user?.role === 'super_admin'
   const { students, loading, search, setSearch, create, update, remove, importCSV } = useStudents(activeClassId)
+  const [availableClasses, setAvailableClasses] = useState<{ id: string; name: string }[]>([])
+
+  useEffect(() => {
+    if (!isSuperAdmin) return
+    supabase.from('classes').select('id, name').order('name').then(({ data }) => {
+      if (data) setAvailableClasses(data)
+    })
+  }, [isSuperAdmin])
 
   const [showForm, setShowForm] = useState(false)
-  const [editStudent, setEditStudent] = useState<{ id: string; student_id: string; name: string } | null>(null)
+  const [editStudent, setEditStudent] = useState<{ id: string; student_id: string; name: string; class_id?: string } | null>(null)
   const [showImport, setShowImport] = useState(false)
+  const [importClassId, setImportClassId] = useState('')
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
 
   return (
@@ -36,8 +47,20 @@ export function StudentsPage() {
 
       {showImport && (
         <Card>
-          <CardContent>
-            <StudentImport onImport={importCSV} />
+          <CardContent className="space-y-3">
+            {isSuperAdmin && availableClasses.length > 0 && (
+              <select
+                value={importClassId}
+                onChange={(e) => setImportClassId(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              >
+                <option value="">Select a class</option>
+                {availableClasses.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            )}
+            <StudentImport onImport={(lines) => importCSV(lines, importClassId || undefined)} />
           </CardContent>
         </Card>
       )}
@@ -97,10 +120,12 @@ export function StudentsPage() {
       <Modal open={showForm} onClose={() => setShowForm(false)} title={editStudent ? 'Edit Student' : 'New Student'}>
         <StudentForm
           initial={editStudent ?? undefined}
-          onSave={async (sid, name, password) =>
+          classId={activeClassId}
+          classes={isSuperAdmin ? availableClasses : undefined}
+          onSave={async (sid, name, password, cid) =>
             editStudent
-              ? update(editStudent.id, { name })
-              : create(sid, name, password!)
+              ? update(editStudent.id, { name, ...(cid ? { class_id: cid } : {}) })
+              : create(sid, name, password!, cid)
           }
           onCancel={() => setShowForm(false)}
         />

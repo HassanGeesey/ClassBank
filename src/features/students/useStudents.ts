@@ -41,7 +41,7 @@ export function useStudents(classId?: string | null) {
     return error?.message ?? null
   }
 
-  async function importCSV(lines: string[][]) {
+  async function importCSV(lines: string[][], importClassId?: string) {
     const errors: string[] = []
     for (let i = 0; i < lines.length; i++) {
       const [sid, name, password] = lines[i]
@@ -49,7 +49,7 @@ export function useStudents(classId?: string | null) {
         errors.push(`Row ${i + 1}: missing fields`)
         continue
       }
-      const err = await create(sid.trim(), name.trim(), password.trim())
+      const err = await create(sid.trim(), name.trim(), password.trim(), importClassId)
       if (err) errors.push(`Row ${i + 1} (${sid}): ${err}`)
     }
     return errors
