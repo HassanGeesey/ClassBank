@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth/AuthContext'
 import { Card, CardContent } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
@@ -12,6 +13,7 @@ import { ROLES } from '../../lib/constants'
 import { Plus, Pencil, Trash2, UserPlus, School } from 'lucide-react'
 
 export function ClassesPage() {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const { classes, loading, create, update, remove } = useClasses()
   const [showForm, setShowForm] = useState(false)
@@ -22,14 +24,14 @@ export function ClassesPage() {
   if (user?.role !== ROLES.SUPER_ADMIN) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-text">My Classes</h1>
+        <h1 className="text-2xl font-bold text-text">{t('classes.admin.title')}</h1>
         {loading ? (
-          <Card><CardContent className="py-8 text-center text-muted">Loading...</CardContent></Card>
+          <Card><CardContent className="py-8 text-center text-muted">{t('classes.admin.loading')}</CardContent></Card>
         ) : classes.length === 0 ? (
           <Card>
             <CardContent className="py-12 flex flex-col items-center gap-3 text-muted">
               <School size={40} className="text-muted/50" />
-              <p>No classes assigned</p>
+              <p>{t('classes.admin.none')}</p>
             </CardContent>
           </Card>
         ) : (
@@ -37,9 +39,9 @@ export function ClassesPage() {
             <Table>
               <THead>
                 <tr>
-                  <Th>Class Name</Th>
-                  <Th>Contribution Target</Th>
-                  <Th>Created</Th>
+                  <Th>{t('classes.admin.columns.className')}</Th>
+                  <Th>{t('classes.admin.columns.target')}</Th>
+                  <Th>{t('classes.admin.columns.created')}</Th>
                 </tr>
               </THead>
               <TBody>
@@ -61,24 +63,24 @@ export function ClassesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h1 className="text-2xl font-bold text-text">Classes</h1>
+        <h1 className="text-2xl font-bold text-text">{t('classes.superAdmin.title')}</h1>
         <Button onClick={() => { setEditClass(null); setShowForm(true) }}>
-          <Plus size={16} /> New Class
+          <Plus size={16} /> {t('classes.superAdmin.new')}
         </Button>
       </div>
 
       <Card>
         {loading ? (
-          <CardContent className="py-8 text-center text-muted">Loading...</CardContent>
+          <CardContent className="py-8 text-center text-muted">{t('classes.superAdmin.loading')}</CardContent>
         ) : classes.length === 0 ? (
-          <CardContent className="py-8 text-center text-muted">No classes yet</CardContent>
+          <CardContent className="py-8 text-center text-muted">{t('classes.superAdmin.none')}</CardContent>
         ) : (
           <Table>
             <THead>
               <tr>
-                <Th>Name</Th>
-                <Th>Created</Th>
-                <Th className="text-right">Actions</Th>
+                <Th>{t('classes.superAdmin.columns.name')}</Th>
+                <Th>{t('classes.superAdmin.columns.created')}</Th>
+                <Th className="text-right">{t('classes.superAdmin.columns.actions')}</Th>
               </tr>
             </THead>
             <TBody>
@@ -108,7 +110,7 @@ export function ClassesPage() {
         )}
       </Card>
 
-      <Modal open={showForm} onClose={() => setShowForm(false)} title={editClass ? 'Edit Class' : 'New Class'}>
+      <Modal open={showForm} onClose={() => setShowForm(false)} title={editClass ? t('classes.modal.edit') : t('classes.modal.new')}>
           <ClassForm
             initial={editClass ?? undefined}
             onSave={async (name, target) => editClass ? update(editClass.id, name, target) : create(name, target)}
@@ -125,14 +127,14 @@ export function ClassesPage() {
         />
       )}
 
-      <Modal open={!!confirmDelete} onClose={() => setConfirmDelete(null)} title="Delete Class">
-        <p className="text-sm text-secondary mb-4">Are you sure you want to delete this class? This action cannot be undone.</p>
+      <Modal open={!!confirmDelete} onClose={() => setConfirmDelete(null)} title={t('classes.modal.delete')}>
+        <p className="text-sm text-secondary mb-4">{t('classes.modal.deleteConfirm')}</p>
         <div className="flex justify-end gap-3">
-          <Button variant="secondary" onClick={() => setConfirmDelete(null)}>Cancel</Button>
+          <Button variant="secondary" onClick={() => setConfirmDelete(null)}>{t('classes.modal.cancel')}</Button>
           <Button variant="danger" onClick={async () => {
             if (confirmDelete) await remove(confirmDelete)
             setConfirmDelete(null)
-          }}>Delete</Button>
+          }}>{t('classes.modal.delete')}</Button>
         </div>
       </Modal>
     </div>

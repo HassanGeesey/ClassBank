@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '../../components/ui/Button'
 import { Upload, FileDown } from 'lucide-react'
 
@@ -7,6 +8,7 @@ interface StudentImportProps {
 }
 
 export function StudentImport({ onImport }: StudentImportProps) {
+  const { t } = useTranslation()
   const [errors, setErrors] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -37,16 +39,16 @@ export function StudentImport({ onImport }: StudentImportProps) {
     <div className="space-y-3">
       <div className="flex gap-2">
         <Button variant="secondary" onClick={downloadTemplate}>
-          <FileDown size={16} /> Template
+          <FileDown size={16} /> {t('import.template')}
         </Button>
         <label className="cursor-pointer">
           <input ref={fileRef} type="file" accept=".csv" onChange={handleFile} className="hidden" />
           <span className="inline-flex items-center gap-2 rounded-btn border border-border bg-white px-4 py-2 text-sm font-medium text-secondary hover:bg-bg-elevated hover:text-text transition-colors">
-            <Upload size={16} /> Import CSV
+            <Upload size={16} /> {t('import.importCsv')}
           </span>
         </label>
       </div>
-      {loading && <p className="text-sm text-muted">Importing students...</p>}
+      {loading && <p className="text-sm text-muted">{t('import.loading')}</p>}
       {errors.length > 0 && (
         <div className="rounded-btn bg-error/10 p-3 max-h-40 overflow-y-auto border border-error/20">
           {errors.map((e, i) => (

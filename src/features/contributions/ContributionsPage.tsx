@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth/AuthContext'
 import { useStudents } from '../students/useStudents'
 import { Card, CardContent } from '../../components/ui/Card'
@@ -11,6 +12,7 @@ import { formatCurrency, formatDate } from '../../lib/utils'
 import { Plus, Trash2, PiggyBank } from 'lucide-react'
 
 export function ContributionsPage() {
+  const { t } = useTranslation()
   const { activeClassId } = useAuth()
   const classId = activeClassId
   const { contributions, loading, create, remove } = useContributions(classId)
@@ -26,7 +28,7 @@ export function ContributionsPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!selectedStudent || !amount || !date) { setError('All fields required'); return }
+    if (!selectedStudent || !amount || !date) { setError(t('contributions.validation.required')); return }
     setSubmitting(true)
     const err = await create(selectedStudent, parseFloat(amount), date)
     if (err) setError(err)
@@ -40,29 +42,29 @@ export function ContributionsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h1 className="text-2xl font-bold text-text">Contributions</h1>
-          <p className="text-sm text-muted">Total collected: <span className="font-semibold text-success">{formatCurrency(total)}</span></p>
+          <h1 className="text-2xl font-bold text-text">{t('contributions.title')}</h1>
+          <p className="text-sm text-muted">{t('contributions.totalCollected')} <span className="font-semibold text-success">{formatCurrency(total)}</span></p>
         </div>
-        <Button onClick={() => setShowForm(true)}><Plus size={16} /> Record Contribution</Button>
+        <Button onClick={() => setShowForm(true)}><Plus size={16} /> {t('contributions.record')}</Button>
       </div>
 
       <Card>
         {loading ? (
-          <CardContent className="py-8 text-center text-muted">Loading...</CardContent>
+          <CardContent className="py-8 text-center text-muted">{t('contributions.loading')}</CardContent>
         ) : contributions.length === 0 ? (
           <CardContent className="flex flex-col items-center gap-3 py-12 text-muted">
             <PiggyBank size={40} className="text-muted/50" />
-            <p>No contributions recorded yet</p>
+            <p>{t('contributions.none')}</p>
           </CardContent>
         ) : (
           <Table>
             <THead>
               <tr>
-                <Th>Student</Th>
-                <Th>ID</Th>
-                <Th>Amount</Th>
-                <Th>Date</Th>
-                <Th className="text-right">Action</Th>
+                <Th>{t('contributions.columns.student')}</Th>
+                <Th>{t('contributions.columns.id')}</Th>
+                <Th>{t('contributions.columns.amount')}</Th>
+                <Th>{t('contributions.columns.date')}</Th>
+                <Th className="text-right">{t('contributions.columns.action')}</Th>
               </tr>
             </THead>
             <TBody>
@@ -86,10 +88,10 @@ export function ContributionsPage() {
         )}
       </Card>
 
-      <Modal open={showForm} onClose={() => setShowForm(false)} title="Record Contribution">
+      <Modal open={showForm} onClose={() => setShowForm(false)} title={t('contributions.modal.title')}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label htmlFor="student" className="block text-sm font-medium text-secondary">Student</label>
+            <label htmlFor="student" className="block text-sm font-medium text-secondary">{t('contributions.modal.student')}</label>
             <select
               id="student"
               value={selectedStudent}
@@ -97,7 +99,7 @@ export function ContributionsPage() {
               className={selectClass}
               required
             >
-              <option value="">Select student...</option>
+              <option value="">{t('contributions.modal.selectStudent')}</option>
               {students.map((s) => (
                 <option key={s.id} value={s.id}>{s.name} ({s.student_id})</option>
               ))}
@@ -105,18 +107,18 @@ export function ContributionsPage() {
           </div>
           <Input
             id="amount"
-            label="Amount"
+            label={t('contributions.modal.amount')}
             type="number"
             step="0.01"
             min="0.01"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="0.00"
+            placeholder={t('contributions.modal.amountPlaceholder')}
             required
           />
           <Input
             id="date"
-            label="Date"
+            label={t('contributions.modal.date')}
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
@@ -124,8 +126,8 @@ export function ContributionsPage() {
           />
           {error && <p className="text-sm text-error bg-error/10 rounded-btn px-3 py-2 border border-error/20">{error}</p>}
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="secondary" onClick={() => setShowForm(false)}>Cancel</Button>
-            <Button type="submit" loading={submitting}>Save</Button>
+            <Button type="button" variant="secondary" onClick={() => setShowForm(false)}>{t('contributions.modal.cancel')}</Button>
+            <Button type="submit" loading={submitting}>{t('contributions.modal.save')}</Button>
           </div>
         </form>
       </Modal>

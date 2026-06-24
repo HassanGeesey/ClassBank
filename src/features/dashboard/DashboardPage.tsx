@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../auth/AuthContext'
 import { Card, CardContent } from '../../components/ui/Card'
@@ -10,6 +11,7 @@ import { PiggyBank, Receipt, Users, Loader2, TrendingDown, TrendingUp, Shield } 
 import type { Profile } from '../../lib/types'
 
 export function DashboardPage() {
+  const { t } = useTranslation()
   const { user, activeClassId } = useAuth()
   const classId = activeClassId
   const { data, loading } = useDashboard(classId)
@@ -52,23 +54,23 @@ export function DashboardPage() {
   if (!data) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-text">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-text">{t('dashboard.title')}</h1>
         {user?.role === 'super_admin' ? (
           <Card>
             <CardContent className="py-5">
               <div className="flex items-center gap-2 mb-4">
                 <Shield size={20} className="text-brand-600" />
-                <h2 className="text-lg font-semibold text-text">All Admins</h2>
+                <h2 className="text-lg font-semibold text-text">{t('dashboard.superAdmin.title')}</h2>
               </div>
               {admins.length === 0 ? (
-                <p className="text-sm text-muted">No admins yet</p>
+                <p className="text-sm text-muted">{t('dashboard.superAdmin.noAdmins')}</p>
               ) : (
                 <Table>
                   <THead>
                     <tr>
-                      <Th>Admin ID</Th>
-                      <Th>Name</Th>
-                      <Th>Assigned Classes</Th>
+                      <Th>{t('dashboard.superAdmin.adminId')}</Th>
+                      <Th>{t('dashboard.superAdmin.name')}</Th>
+                      <Th>{t('dashboard.superAdmin.assignedClasses')}</Th>
                     </tr>
                   </THead>
                   <TBody>
@@ -87,7 +89,7 @@ export function DashboardPage() {
         ) : (
           <Card>
             <CardContent className="py-12 text-center text-muted">
-              No class assigned
+              {t('dashboard.noClassAssigned')}
             </CardContent>
           </Card>
         )}
@@ -100,8 +102,8 @@ export function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-text">Dashboard</h1>
-        <p className="text-secondary">Welcome back, {user?.name}</p>
+        <h1 className="text-2xl font-bold text-text">{t('dashboard.title')}</h1>
+        <p className="text-secondary">{t('dashboard.welcome', { name: user?.name })}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -111,7 +113,7 @@ export function DashboardPage() {
               <PiggyBank size={24} className="text-success" />
             </div>
             <div>
-              <p className="text-sm text-muted">Total Contributions</p>
+              <p className="text-sm text-muted">{t('dashboard.totalContributions')}</p>
               <p className="text-2xl font-bold text-text tabular-nums">{formatCurrency(data.totalContributions)}</p>
             </div>
           </CardContent>
@@ -122,7 +124,7 @@ export function DashboardPage() {
               <Receipt size={24} className="text-error" />
             </div>
             <div>
-              <p className="text-sm text-muted">Total Expenses</p>
+              <p className="text-sm text-muted">{t('dashboard.totalExpenses')}</p>
               <p className="text-2xl font-bold text-text tabular-nums">{formatCurrency(data.totalExpenses)}</p>
             </div>
           </CardContent>
@@ -137,7 +139,7 @@ export function DashboardPage() {
               )}
             </div>
             <div>
-              <p className="text-sm text-muted">Remaining Balance</p>
+              <p className="text-sm text-muted">{t('dashboard.remainingBalance')}</p>
               <p className={`text-2xl font-bold tabular-nums ${isPositive ? 'text-text' : 'text-error'}`}>
                 {formatCurrency(data.remainingBalance)}
               </p>
@@ -150,7 +152,7 @@ export function DashboardPage() {
               <Users size={24} className="text-warning" />
             </div>
             <div>
-              <p className="text-sm text-muted">Students</p>
+              <p className="text-sm text-muted">{t('dashboard.students')}</p>
               <p className="text-2xl font-bold text-text tabular-nums">{data.totalStudents}</p>
             </div>
           </CardContent>
@@ -159,18 +161,18 @@ export function DashboardPage() {
 
       <Card>
         <CardContent className="py-5">
-          <h2 className="text-sm font-semibold text-secondary mb-3">Payment Status</h2>
+          <h2 className="text-sm font-semibold text-secondary mb-3">{t('dashboard.paymentStatus')}</h2>
           <div className="flex gap-4">
             <div className="flex items-center gap-2">
-              <Badge variant="success">Paid</Badge>
+              <Badge variant="success">{t('dashboard.paid')}</Badge>
               <span className="text-sm text-text">{data.paidCount}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="warning">Partial</Badge>
+              <Badge variant="warning">{t('dashboard.partial')}</Badge>
               <span className="text-sm text-text">{data.partialCount}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="danger">Unpaid</Badge>
+              <Badge variant="danger">{t('dashboard.unpaid')}</Badge>
               <span className="text-sm text-text">{data.unpaidCount}</span>
             </div>
           </div>

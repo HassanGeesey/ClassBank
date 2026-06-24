@@ -6,7 +6,7 @@ export function formatCurrency(amount: number): string {
 }
 
 export function formatDate(date: string): string {
-  return new Date(date).toLocaleDateString('en-PH', {
+  return new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

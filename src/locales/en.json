@@ -1,0 +1,255 @@
+{
+  "app": {
+    "name": "ClassBank"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "classes": "Classes",
+    "students": "Students",
+    "contributions": "Contributions",
+    "expenses": "Expenses",
+    "reports": "Reports",
+    "settings": "Settings",
+    "signOut": "Sign Out",
+    "activeClass": "Active Class"
+  },
+  "auth": {
+    "signIn": {
+      "title": "ClassBank",
+      "subtitle": "Sign in with your Student ID",
+      "studentId": "Student ID",
+      "studentIdPlaceholder": "e.g. 2024-0001",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "signIn": "Sign In"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "incorrect": "Current password is incorrect",
+      "success": "Password changed successfully",
+      "submit": "Change Password"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {{name}}",
+    "totalContributions": "Total Contributions",
+    "totalExpenses": "Total Expenses",
+    "remainingBalance": "Remaining Balance",
+    "students": "Students",
+    "paymentStatus": "Payment Status",
+    "paid": "Paid",
+    "partial": "Partial",
+    "unpaid": "Unpaid",
+    "noClassAssigned": "No class assigned",
+    "loading": "Loading...",
+    "superAdmin": {
+      "title": "All Admins",
+      "noAdmins": "No admins yet",
+      "adminId": "Admin ID",
+      "name": "Name",
+      "assignedClasses": "Assigned Classes"
+    }
+  },
+  "students": {
+    "title": "Students",
+    "importCsv": "Import CSV",
+    "addStudent": "Add Student",
+    "selectClass": "Select a class",
+    "searchPlaceholder": "Search by name or ID...",
+    "loading": "Loading...",
+    "noResults": "No students match your search",
+    "noStudents": "No students yet",
+    "columns": {
+      "studentId": "Student ID",
+      "name": "Name",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "active": "Active",
+    "modal": {
+      "edit": "Edit Student",
+      "new": "New Student",
+      "delete": "Delete Student",
+      "deleteConfirm": "Are you sure? This will permanently delete the student and all their data.",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "update": "Update",
+      "create": "Create"
+    },
+    "form": {
+      "studentId": "Student ID",
+      "studentIdPlaceholder": "e.g. 2024-0001",
+      "name": "Name",
+      "namePlaceholder": "Full name",
+      "class": "Class",
+      "password": "Password",
+      "passwordPlaceholder": "Initial password",
+      "validation": {
+        "required": "Student ID and Name are required",
+        "passwordRequired": "Password is required for new students",
+        "classRequired": "Please select a class"
+      }
+    }
+  },
+  "contributions": {
+    "title": "Contributions",
+    "totalCollected": "Total collected:",
+    "record": "Record Contribution",
+    "loading": "Loading...",
+    "none": "No contributions recorded yet",
+    "columns": {
+      "student": "Student",
+      "id": "ID",
+      "amount": "Amount",
+      "date": "Date",
+      "action": "Action"
+    },
+    "modal": {
+      "title": "Record Contribution",
+      "student": "Student",
+      "selectStudent": "Select student...",
+      "amount": "Amount",
+      "amountPlaceholder": "0.00",
+      "date": "Date",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "validation": {
+      "required": "All fields required"
+    }
+  },
+  "expenses": {
+    "title": "Expenses",
+    "totalSpent": "Total spent:",
+    "record": "Record Expense",
+    "loading": "Loading...",
+    "none": "No expenses recorded yet",
+    "columns": {
+      "description": "Description",
+      "amount": "Amount",
+      "date": "Date",
+      "action": "Action"
+    },
+    "modal": {
+      "title": "Record Expense",
+      "description": "Description",
+      "descriptionPlaceholder": "What was the expense for?",
+      "amount": "Amount",
+      "amountPlaceholder": "0.00",
+      "date": "Date",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "validation": {
+      "required": "All fields required"
+    }
+  },
+  "classes": {
+    "admin": {
+      "title": "My Classes",
+      "loading": "Loading...",
+      "none": "No classes assigned",
+      "columns": {
+        "className": "Class Name",
+        "target": "Contribution Target",
+        "created": "Created"
+      }
+    },
+    "superAdmin": {
+      "title": "Classes",
+      "new": "New Class",
+      "loading": "Loading...",
+      "none": "No classes yet",
+      "columns": {
+        "name": "Name",
+        "created": "Created",
+        "actions": "Actions"
+      }
+    },
+    "modal": {
+      "edit": "Edit Class",
+      "new": "New Class",
+      "delete": "Delete Class",
+      "deleteConfirm": "Are you sure you want to delete this class? This action cannot be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "form": {
+      "className": "Class Name",
+      "classNamePlaceholder": "e.g. BSIT 3A",
+      "target": "Contribution Target per Student ($)",
+      "targetPlaceholder": "e.g. 500.00",
+      "cancel": "Cancel",
+      "update": "Update",
+      "create": "Create",
+      "validation": {
+        "nameRequired": "Name is required"
+      }
+    },
+    "assignAdmins": {
+      "title": "Admins — {{className}}",
+      "currentAdmins": "Current Admins",
+      "loading": "Loading...",
+      "noAdmins": "No admins assigned",
+      "availableAdmins": "Available Admins",
+      "remove": "Remove",
+      "assign": "Assign"
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Download PDF reports",
+    "contributions": "Contributions",
+    "expenses": "Expenses",
+    "studentStatus": "Student Status",
+    "download": "Download",
+    "total": "{{currency}} total",
+    "remaining": "{{currency}} remaining"
+  },
+  "settings": {
+    "title": "Settings",
+    "createAdmin": "Create Admin",
+    "adminId": "Admin ID",
+    "name": "Name",
+    "password": "Password",
+    "submit": "Create Admin",
+    "success": "Admin created successfully",
+    "language": "Language",
+    "languageLabel": "App Language"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "retry": "Try again"
+  },
+  "import": {
+    "template": "Template",
+    "importCsv": "Import CSV",
+    "loading": "Importing students..."
+  },
+  "pdf": {
+    "contributionsReport": "Contributions Report",
+    "expensesReport": "Expenses Report",
+    "studentStatus": "Student Payment Status",
+    "generated": "Generated: {{date}}",
+    "totalContributions": "Total Contributions: {{currency}}",
+    "totalExpenses": "Total Expenses: {{currency}}",
+    "targetPerStudent": "Target per Student: {{currency}}",
+    "columns": {
+      "studentId": "Student ID",
+      "name": "Name",
+      "amount": "Amount",
+      "date": "Date",
+      "description": "Description",
+      "totalPaid": "Total Paid",
+      "status": "Status"
+    },
+    "status": {
+      "paid": "Paid",
+      "partial": "Partial",
+      "unpaid": "Unpaid"
+    }
+  }
+}

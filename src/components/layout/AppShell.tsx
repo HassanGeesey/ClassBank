@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 import { Sidebar, navItems } from './Sidebar'
 import { useAuth } from '../../features/auth/AuthContext'
@@ -17,6 +18,7 @@ interface AppShellProps {
 }
 
 function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void }) {
+  const { t } = useTranslation()
   const [showMore, setShowMore] = useState(false)
   const items = navItems[role]
   const maxVisible = 5
@@ -39,7 +41,7 @@ function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void 
               }
             >
               <item.icon size={20} />
-              <span className="text-[10px] font-medium leading-tight">{item.label}</span>
+              <span className="text-[10px] font-medium leading-tight">{t(`nav.${item.key}`)}</span>
             </NavLink>
           ))}
           {overflow.length > 0 && (
@@ -48,7 +50,7 @@ function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void 
               className="flex flex-col items-center gap-0.5 py-1 px-2 rounded-btn text-muted hover:text-text transition-colors cursor-pointer"
             >
               <MoreHorizontal size={20} />
-              <span className="text-[10px] font-medium leading-tight">More</span>
+              <span className="text-[10px] font-medium leading-tight">{t('nav.settings')}</span>
             </button>
           )}
         </div>
@@ -59,7 +61,7 @@ function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void 
           <div className="absolute inset-0 bg-black/30" onClick={() => setShowMore(false)} />
           <div className="absolute bottom-0 left-0 right-0 bg-bg-card border-t border-border rounded-t-card p-4 pb-20">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-semibold text-text">More</span>
+              <span className="text-sm font-semibold text-text">{t('nav.settings')}</span>
               <button onClick={() => setShowMore(false)} className="p-1 text-muted hover:text-text cursor-pointer">
                 <X size={20} />
               </button>
@@ -78,7 +80,7 @@ function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void 
                   }
                 >
                   <item.icon size={18} />
-                  {item.label}
+                  {t(`nav.${item.key}`)}
                 </NavLink>
               ))}
             </div>
@@ -87,7 +89,7 @@ function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void 
               className="flex w-full items-center gap-3 rounded-btn px-3 py-2.5 text-sm font-medium text-secondary hover:bg-bg-elevated hover:text-text transition-colors mt-4 cursor-pointer"
             >
               <LogOut size={18} />
-              Sign Out
+              {t('nav.signOut')}
             </button>
           </div>
         </div>
@@ -97,13 +99,14 @@ function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void 
 }
 
 function MobileTopBar({ onSignOut }: { onSignOut: () => void }) {
+  const { t } = useTranslation()
   const { adminClasses, activeClassId, setActiveClassId } = useAuth()
 
   return (
     <div className="lg:hidden flex items-center justify-between px-4 py-3 bg-bg-card border-b border-border">
       <div className="flex items-center gap-2 min-w-0">
-        <img src="/classBankLogo.png" alt="ClassBank" className="h-7 w-auto shrink-0" />
-        <span className="font-semibold text-text truncate">ClassBank</span>
+        <img src="/classBankLogo.png" alt={t('app.name')} className="h-7 w-auto shrink-0" />
+        <span className="font-semibold text-text truncate">{t('app.name')}</span>
       </div>
       <div className="flex items-center gap-2">
         {adminClasses.length > 0 && (
@@ -120,7 +123,7 @@ function MobileTopBar({ onSignOut }: { onSignOut: () => void }) {
         <button
           onClick={onSignOut}
           className="flex items-center justify-center size-9 rounded-btn text-secondary hover:bg-bg-elevated hover:text-text transition-colors cursor-pointer"
-          title="Sign Out"
+          title={t('nav.signOut')}
         >
           <LogOut size={18} />
         </button>

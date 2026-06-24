@@ -1,0 +1,255 @@
+{
+  "app": {
+    "name": "ClassBank"
+  },
+  "nav": {
+    "dashboard": "",
+    "classes": "",
+    "students": "",
+    "contributions": "",
+    "expenses": "",
+    "reports": "",
+    "settings": "",
+    "signOut": "",
+    "activeClass": ""
+  },
+  "auth": {
+    "signIn": {
+      "title": "ClassBank",
+      "subtitle": "",
+      "studentId": "",
+      "studentIdPlaceholder": "",
+      "password": "",
+      "passwordPlaceholder": "",
+      "signIn": ""
+    },
+    "changePassword": {
+      "title": "",
+      "currentPassword": "",
+      "newPassword": "",
+      "incorrect": "",
+      "success": "",
+      "submit": ""
+    }
+  },
+  "dashboard": {
+    "title": "",
+    "welcome": "",
+    "totalContributions": "",
+    "totalExpenses": "",
+    "remainingBalance": "",
+    "students": "",
+    "paymentStatus": "",
+    "paid": "",
+    "partial": "",
+    "unpaid": "",
+    "noClassAssigned": "",
+    "loading": "",
+    "superAdmin": {
+      "title": "",
+      "noAdmins": "",
+      "adminId": "",
+      "name": "",
+      "assignedClasses": ""
+    }
+  },
+  "students": {
+    "title": "",
+    "importCsv": "",
+    "addStudent": "",
+    "selectClass": "",
+    "searchPlaceholder": "",
+    "loading": "",
+    "noResults": "",
+    "noStudents": "",
+    "columns": {
+      "studentId": "",
+      "name": "",
+      "status": "",
+      "actions": ""
+    },
+    "active": "",
+    "modal": {
+      "edit": "",
+      "new": "",
+      "delete": "",
+      "deleteConfirm": "",
+      "cancel": "",
+      "delete": "",
+      "update": "",
+      "create": ""
+    },
+    "form": {
+      "studentId": "",
+      "studentIdPlaceholder": "",
+      "name": "",
+      "namePlaceholder": "",
+      "class": "",
+      "password": "",
+      "passwordPlaceholder": "",
+      "validation": {
+        "required": "",
+        "passwordRequired": "",
+        "classRequired": ""
+      }
+    }
+  },
+  "contributions": {
+    "title": "",
+    "totalCollected": "",
+    "record": "",
+    "loading": "",
+    "none": "",
+    "columns": {
+      "student": "",
+      "id": "",
+      "amount": "",
+      "date": "",
+      "action": ""
+    },
+    "modal": {
+      "title": "",
+      "student": "",
+      "selectStudent": "",
+      "amount": "",
+      "amountPlaceholder": "",
+      "date": "",
+      "cancel": "",
+      "save": ""
+    },
+    "validation": {
+      "required": ""
+    }
+  },
+  "expenses": {
+    "title": "",
+    "totalSpent": "",
+    "record": "",
+    "loading": "",
+    "none": "",
+    "columns": {
+      "description": "",
+      "amount": "",
+      "date": "",
+      "action": ""
+    },
+    "modal": {
+      "title": "",
+      "description": "",
+      "descriptionPlaceholder": "",
+      "amount": "",
+      "amountPlaceholder": "",
+      "date": "",
+      "cancel": "",
+      "save": ""
+    },
+    "validation": {
+      "required": ""
+    }
+  },
+  "classes": {
+    "admin": {
+      "title": "",
+      "loading": "",
+      "none": "",
+      "columns": {
+        "className": "",
+        "target": "",
+        "created": ""
+      }
+    },
+    "superAdmin": {
+      "title": "",
+      "new": "",
+      "loading": "",
+      "none": "",
+      "columns": {
+        "name": "",
+        "created": "",
+        "actions": ""
+      }
+    },
+    "modal": {
+      "edit": "",
+      "new": "",
+      "delete": "",
+      "deleteConfirm": "",
+      "cancel": "",
+      "delete": ""
+    },
+    "form": {
+      "className": "",
+      "classNamePlaceholder": "",
+      "target": "",
+      "targetPlaceholder": "",
+      "cancel": "",
+      "update": "",
+      "create": "",
+      "validation": {
+        "nameRequired": ""
+      }
+    },
+    "assignAdmins": {
+      "title": "",
+      "currentAdmins": "",
+      "loading": "",
+      "noAdmins": "",
+      "availableAdmins": "",
+      "remove": "",
+      "assign": ""
+    }
+  },
+  "reports": {
+    "title": "",
+    "subtitle": "",
+    "contributions": "",
+    "expenses": "",
+    "studentStatus": "",
+    "download": "",
+    "total": "",
+    "remaining": ""
+  },
+  "settings": {
+    "title": "",
+    "createAdmin": "",
+    "adminId": "",
+    "name": "",
+    "password": "",
+    "submit": "",
+    "success": "",
+    "language": "",
+    "languageLabel": ""
+  },
+  "error": {
+    "title": "",
+    "retry": ""
+  },
+  "import": {
+    "template": "",
+    "importCsv": "",
+    "loading": ""
+  },
+  "pdf": {
+    "contributionsReport": "",
+    "expensesReport": "",
+    "studentStatus": "",
+    "generated": "",
+    "totalContributions": "",
+    "totalExpenses": "",
+    "targetPerStudent": "",
+    "columns": {
+      "studentId": "",
+      "name": "",
+      "amount": "",
+      "date": "",
+      "description": "",
+      "totalPaid": "",
+      "status": ""
+    },
+    "status": {
+      "paid": "",
+      "partial": "",
+      "unpaid": ""
+    }
+  }
+}

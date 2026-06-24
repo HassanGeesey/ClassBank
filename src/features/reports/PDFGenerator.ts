@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import { formatCurrency } from '../../lib/utils'
+import i18n from '../../lib/i18n'
 import type { Contribution, Expense, Profile } from '../../lib/types'
 
 interface ContributionWithStudent extends Contribution {
@@ -16,10 +17,10 @@ export async function generateContributionReport(
   doc.setFontSize(18)
   doc.text(title, 14, 22)
   doc.setFontSize(10)
-  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 30)
-  doc.text(`Total Contributions: ${formatCurrency(total)}`, 14, 36)
+  doc.text(i18n.t('pdf.generated', { date: new Date().toLocaleDateString() }), 14, 30)
+  doc.text(i18n.t('pdf.totalContributions', { currency: formatCurrency(total) }), 14, 36)
 
-  const rows = [['Student ID', 'Name', 'Amount', 'Date']]
+  const rows = [[i18n.t('pdf.columns.studentId'), i18n.t('pdf.columns.name'), i18n.t('pdf.columns.amount'), i18n.t('pdf.columns.date')]]
   contributions.forEach((c) => {
     rows.push([
       c.profiles?.student_id ?? '',
@@ -43,10 +44,10 @@ export async function generateExpenseReport(
   doc.setFontSize(18)
   doc.text(title, 14, 22)
   doc.setFontSize(10)
-  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 30)
-  doc.text(`Total Expenses: ${formatCurrency(total)}`, 14, 36)
+  doc.text(i18n.t('pdf.generated', { date: new Date().toLocaleDateString() }), 14, 30)
+  doc.text(i18n.t('pdf.totalExpenses', { currency: formatCurrency(total) }), 14, 36)
 
-  const rows = [['Description', 'Amount', 'Date']]
+  const rows = [[i18n.t('pdf.columns.description'), i18n.t('pdf.columns.amount'), i18n.t('pdf.columns.date')]]
   expenses.forEach((e) => {
     rows.push([
       e.description,
@@ -70,13 +71,14 @@ export async function generateStudentStatusReport(
   doc.setFontSize(18)
   doc.text(title, 14, 22)
   doc.setFontSize(10)
-  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 30)
-  doc.text(`Target per Student: ${formatCurrency(target)}`, 14, 36)
+  doc.text(i18n.t('pdf.generated', { date: new Date().toLocaleDateString() }), 14, 30)
+  doc.text(i18n.t('pdf.targetPerStudent', { currency: formatCurrency(target) }), 14, 36)
 
-  const rows = [['Student ID', 'Name', 'Total Paid', 'Status']]
+  const t = i18n.t
+  const rows = [[t('pdf.columns.studentId'), t('pdf.columns.name'), t('pdf.columns.totalPaid'), t('pdf.columns.status')]]
   students.forEach((s) => {
     const paid = studentTotals[s.id] ?? 0
-    const status = paid >= target ? 'Paid' : paid > 0 ? 'Partial' : 'Unpaid'
+    const status = paid >= target ? t('pdf.status.paid') : paid > 0 ? t('pdf.status.partial') : t('pdf.status.unpaid')
     rows.push([s.student_id, s.name, formatCurrency(paid), status])
   })
 

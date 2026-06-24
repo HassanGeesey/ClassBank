@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 
@@ -11,6 +12,7 @@ interface StudentFormProps {
 }
 
 export function StudentForm({ initial, onSave, onCancel, classId, classes }: StudentFormProps) {
+  const { t } = useTranslation()
   const [studentId, setStudentId] = useState(initial?.student_id ?? '')
   const [name, setName] = useState(initial?.name ?? '')
   const [password, setPassword] = useState('')
@@ -20,9 +22,9 @@ export function StudentForm({ initial, onSave, onCancel, classId, classes }: Stu
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!studentId.trim() || !name.trim()) { setError('Student ID and Name are required'); return }
-    if (!initial && !password.trim()) { setError('Password is required for new students'); return }
-    if (classes && !selectedClassId) { setError('Please select a class'); return }
+    if (!studentId.trim() || !name.trim()) { setError(t('students.form.validation.required')); return }
+    if (!initial && !password.trim()) { setError(t('students.form.validation.passwordRequired')); return }
+    if (classes && !selectedClassId) { setError(t('students.form.validation.classRequired')); return }
     setLoading(true)
     const err = await onSave(studentId.trim(), name.trim(), initial ? undefined : password.trim(), selectedClassId || undefined)
     if (err) setError(err)
@@ -35,25 +37,25 @@ export function StudentForm({ initial, onSave, onCancel, classId, classes }: Stu
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
         id="sid"
-        label="Student ID"
+        label={t('students.form.studentId')}
         value={studentId}
         onChange={(e) => setStudentId(e.target.value)}
-        placeholder="e.g. 2024-0001"
+        placeholder={t('students.form.studentIdPlaceholder')}
         disabled={!!initial}
         error={error}
         required
       />
       <Input
         id="sname"
-        label="Name"
+        label={t('students.form.name')}
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Full name"
+        placeholder={t('students.form.namePlaceholder')}
         required
       />
       {classes && classes.length > 0 && (
         <div>
-          <label htmlFor="sclass" className="block text-sm font-medium text-secondary mb-1">Class</label>
+          <label htmlFor="sclass" className="block text-sm font-medium text-secondary mb-1">{t('students.form.class')}</label>
           <select
             id="sclass"
             value={selectedClassId}
@@ -61,7 +63,7 @@ export function StudentForm({ initial, onSave, onCancel, classId, classes }: Stu
             className={selectClass}
             required
           >
-            <option value="">Select a class</option>
+            <option value="">{t('students.selectClass')}</option>
             {classes.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
@@ -72,17 +74,17 @@ export function StudentForm({ initial, onSave, onCancel, classId, classes }: Stu
       {!initial && (
         <Input
           id="spassword"
-          label="Password"
+          label={t('students.form.password')}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Initial password"
+          placeholder={t('students.form.passwordPlaceholder')}
           required
         />
       )}
       <div className="flex justify-end gap-3">
-        <Button type="button" variant="secondary" onClick={onCancel}>Cancel</Button>
-        <Button type="submit" loading={loading}>{initial ? 'Update' : 'Create'}</Button>
+        <Button type="button" variant="secondary" onClick={onCancel}>{t('students.modal.cancel')}</Button>
+        <Button type="submit" loading={loading}>{initial ? t('students.modal.update') : t('students.modal.create')}</Button>
       </div>
     </form>
   )

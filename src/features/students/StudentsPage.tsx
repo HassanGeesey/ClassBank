@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../auth/AuthContext'
 import { Card, CardContent } from '../../components/ui/Card'
@@ -13,6 +14,7 @@ import { useStudents } from './useStudents'
 import { Search, Plus, Pencil, Trash2 } from 'lucide-react'
 
 export function StudentsPage() {
+  const { t } = useTranslation()
   const { user, activeClassId } = useAuth()
   const isSuperAdmin = user?.role === 'super_admin'
   const { students, loading, search, setSearch, create, update, remove, importCSV } = useStudents(activeClassId)
@@ -36,13 +38,13 @@ export function StudentsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h1 className="text-2xl font-bold text-text">Students</h1>
+        <h1 className="text-2xl font-bold text-text">{t('students.title')}</h1>
         <div className="flex gap-2">
           <Button variant="secondary" onClick={() => setShowImport(!showImport)}>
-            <Plus size={16} /> Import CSV
+            <Plus size={16} /> {t('students.importCsv')}
           </Button>
           <Button onClick={() => { setEditStudent(null); setShowForm(true) }}>
-            <Plus size={16} /> Add Student
+            <Plus size={16} /> {t('students.addStudent')}
           </Button>
         </div>
       </div>
@@ -56,7 +58,7 @@ export function StudentsPage() {
                 onChange={(e) => setImportClassId(e.target.value)}
                 className={selectClass}
               >
-                <option value="">Select a class</option>
+                <option value="">{t('students.selectClass')}</option>
                 {availableClasses.map((c) => (
                   <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
@@ -75,25 +77,25 @@ export function StudentsPage() {
               id="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name or ID..."
+              placeholder={t('students.searchPlaceholder')}
               className="pl-9"
             />
           </div>
         </div>
         {loading ? (
-          <CardContent className="py-8 text-center text-muted">Loading...</CardContent>
+          <CardContent className="py-8 text-center text-muted">{t('students.loading')}</CardContent>
         ) : students.length === 0 ? (
           <CardContent className="py-8 text-center text-muted">
-            {search ? 'No students match your search' : 'No students yet'}
+            {search ? t('students.noResults') : t('students.noStudents')}
           </CardContent>
         ) : (
           <Table>
             <THead>
               <tr>
-                <Th>Student ID</Th>
-                <Th>Name</Th>
-                <Th>Status</Th>
-                <Th className="text-right">Actions</Th>
+                <Th>{t('students.columns.studentId')}</Th>
+                <Th>{t('students.columns.name')}</Th>
+                <Th>{t('students.columns.status')}</Th>
+                <Th className="text-right">{t('students.columns.actions')}</Th>
               </tr>
             </THead>
             <TBody>
@@ -101,7 +103,7 @@ export function StudentsPage() {
                 <tr key={s.id}>
                   <Td className="font-mono text-sm text-muted">{s.student_id}</Td>
                   <Td className="font-medium text-text">{s.name}</Td>
-                  <Td><Badge variant="info">Active</Badge></Td>
+                  <Td><Badge variant="info">{t('students.active')}</Badge></Td>
                   <Td>
                     <div className="flex justify-end gap-2">
                       <Button variant="ghost" size="sm" onClick={() => { setEditStudent({ id: s.id, student_id: s.student_id, name: s.name, class_id: s.class_id ?? undefined }); setShowForm(true) }}>
@@ -119,7 +121,7 @@ export function StudentsPage() {
         )}
       </Card>
 
-      <Modal open={showForm} onClose={() => setShowForm(false)} title={editStudent ? 'Edit Student' : 'New Student'}>
+      <Modal open={showForm} onClose={() => setShowForm(false)} title={editStudent ? t('students.modal.edit') : t('students.modal.new')}>
         <StudentForm
           initial={editStudent ?? undefined}
           classId={activeClassId}
@@ -133,14 +135,14 @@ export function StudentsPage() {
         />
       </Modal>
 
-      <Modal open={!!confirmDelete} onClose={() => setConfirmDelete(null)} title="Delete Student">
-        <p className="text-sm text-secondary mb-4">Are you sure? This will permanently delete the student and all their data.</p>
+      <Modal open={!!confirmDelete} onClose={() => setConfirmDelete(null)} title={t('students.modal.delete')}>
+        <p className="text-sm text-secondary mb-4">{t('students.modal.deleteConfirm')}</p>
         <div className="flex justify-end gap-3">
-          <Button variant="secondary" onClick={() => setConfirmDelete(null)}>Cancel</Button>
+          <Button variant="secondary" onClick={() => setConfirmDelete(null)}>{t('students.modal.cancel')}</Button>
           <Button variant="danger" onClick={async () => {
             if (confirmDelete) await remove(confirmDelete)
             setConfirmDelete(null)
-          }}>Delete</Button>
+          }}>{t('students.modal.delete')}</Button>
         </div>
       </Modal>
     </div>
