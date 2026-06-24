@@ -1,0 +1,121 @@
+import { useState } from 'react'
+import { useAuth } from '../auth/AuthContext'
+import { Card, CardContent } from '../../components/ui/Card'
+import { Button } from '../../components/ui/Button'
+import { Input } from '../../components/ui/Input'
+import { Table, TBody, Td, Th, THead } from '../../components/ui/Table'
+import { Modal } from '../../components/ui/Modal'
+import { useExpenses, useExpenseTotal } from './useExpenses'
+import { formatCurrency, formatDate } from '../../lib/utils'
+import { Plus, Trash2, Receipt } from 'lucide-react'
+
+export function ExpensesPage() {
+  const { user } = useAuth()
+  const classId = user?.class_id
+  const { expenses, loading, create, remove } = useExpenses(classId)
+  const { total } = useExpenseTotal(classId)
+
+  const [showForm, setShowForm] = useState(false)
+  const [description, setDescription] = useState('')
+  const [amount, setAmount] = useState('')
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0])
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!description.trim() || !amount || !date) { setError('All fields required'); return }
+    setSubmitting(true)
+    const err = await create(description.trim(), parseFloat(amount), date)
+    if (err) setError(err)
+    else { setShowForm(false); setDescription(''); setAmount(''); setError('') }
+    setSubmitting(false)
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Expenses</h1>
+          <p className="text-sm text-slate-500">Total spent: <span className="font-semibold text-red-600">{formatCurrency(total)}</span></p>
+        </div>
+        <Button onClick={() => setShowForm(true)}><Plus size={16} /> Record Expense</Button>
+      </div>
+
+      <Card>
+        {loading ? (
+          <CardContent className="py-8 text-center text-slate-400">Loading...</CardContent>
+        ) : expenses.length === 0 ? (
+          <CardContent className="flex flex-col items-center gap-3 py-12 text-slate-500">
+            <Receipt size={40} className="text-slate-300" />
+            <p>No expenses recorded yet</p>
+          </CardContent>
+        ) : (
+          <Table>
+            <THead>
+              <tr>
+                <Th>Description</Th>
+                <Th>Amount</Th>
+                <Th>Date</Th>
+                <Th className="text-right">Action</Th>
+              </tr>
+            </THead>
+            <TBody>
+              {expenses.map((e) => (
+                <tr key={e.id}>
+                  <Td className="font-medium text-slate-900">{e.description}</Td>
+                  <Td className="font-semibold text-red-600">{formatCurrency(Number(e.amount))}</Td>
+                  <Td>{formatDate(e.date)}</Td>
+                  <Td>
+                    <div className="flex justify-end">
+                      <Button variant="ghost" size="sm" onClick={() => remove(e.id)}>
+                        <Trash2 size={16} className="text-red-500" />
+                      </Button>
+                    </div>
+                  </Td>
+                </tr>
+              ))}
+            </TBody>
+          </Table>
+        )}
+      </Card>
+
+      <Modal open={showForm} onClose={() => setShowForm(false)} title="Record Expense">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            id="desc"
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="What was the expense for?"
+            required
+          />
+          <Input
+            id="amount"
+            label="Amount"
+            type="number"
+            step="0.01"
+            min="0.01"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="0.00"
+            required
+          />
+          <Input
+            id="date"
+            label="Date"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+          />
+          {error && <p className="text-sm text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+          <div className="flex justify-end gap-3">
+            <Button type="button" variant="secondary" onClick={() => setShowForm(false)}>Cancel</Button>
+            <Button type="submit" loading={submitting}>Save</Button>
+          </div>
+        </form>
+      </Modal>
+    </div>
+  )
+}
