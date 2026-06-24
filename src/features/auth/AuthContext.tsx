@@ -50,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (data) {
       setUser(data)
       await fetchAdminClasses(data)
+      if (data.class_id) setActiveClassId(data.class_id)
     } else {
       setUser(null)
     }
