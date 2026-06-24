@@ -41,16 +41,16 @@ export function StudentImport({ onImport }: StudentImportProps) {
         </Button>
         <label className="cursor-pointer">
           <input ref={fileRef} type="file" accept=".csv" onChange={handleFile} className="hidden" />
-          <span className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
+          <span className="inline-flex items-center gap-2 rounded-btn border border-border bg-white px-4 py-2 text-sm font-medium text-secondary hover:bg-bg-elevated hover:text-text transition-colors">
             <Upload size={16} /> Import CSV
           </span>
         </label>
       </div>
-      {loading && <p className="text-sm text-slate-500">Importing students...</p>}
+      {loading && <p className="text-sm text-muted">Importing students...</p>}
       {errors.length > 0 && (
-        <div className="rounded-lg bg-red-50 p-3 max-h-40 overflow-y-auto">
+        <div className="rounded-btn bg-error/10 p-3 max-h-40 overflow-y-auto border border-error/20">
           {errors.map((e, i) => (
-            <p key={i} className="text-sm text-red-600">{e}</p>
+            <p key={i} className="text-sm text-error">{e}</p>
           ))}
         </div>
       )}

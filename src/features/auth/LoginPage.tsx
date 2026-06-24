@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { PiggyBank } from 'lucide-react'
 import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Card, CardContent, CardHeader } from '../../components/ui/Card'
@@ -25,14 +24,16 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-bg-main p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <PiggyBank size={32} className="text-emerald-500" />
-            <h1 className="text-2xl font-bold text-slate-900">ClassBank</h1>
+          <div className="flex flex-col items-center gap-3 mb-2">
+            <img src="/classBankLogo.png" alt="ClassBank" className="h-12 w-auto" />
+            <div className="text-center">
+              <h1 className="text-2xl font-bold text-text">ClassBank</h1>
+              <p className="text-sm text-muted mt-0.5">Sign in with your Student ID</p>
+            </div>
           </div>
-          <p className="text-center text-sm text-slate-500">Sign in with your Student ID</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -54,7 +55,7 @@ export function LoginPage() {
               required
             />
             {error && (
-              <p className="text-sm text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>
+              <p className="text-sm text-error bg-error/10 rounded-btn px-3 py-2 border border-error/20">{error}</p>
             )}
             <Button type="submit" loading={loading} className="w-full">
               Sign In

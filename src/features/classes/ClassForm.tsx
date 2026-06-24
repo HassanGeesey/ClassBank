@@ -36,7 +36,7 @@ export function ClassForm({ initial, onSave, onCancel }: ClassFormProps) {
       />
       <Input
         id="target"
-        label="Contribution Target per Student (₱)"
+        label="Contribution Target per Student ($)"
         type="number"
         step="0.01"
         min="0"

@@ -31,10 +31,12 @@ export function StudentsPage() {
   const [importClassId, setImportClassId] = useState('')
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
 
+  const selectClass = 'w-full rounded-btn border border-border-hover bg-white px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-600/30'
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Students</h1>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h1 className="text-2xl font-bold text-text">Students</h1>
         <div className="flex gap-2">
           <Button variant="secondary" onClick={() => setShowImport(!showImport)}>
             <Plus size={16} /> Import CSV
@@ -52,7 +54,7 @@ export function StudentsPage() {
               <select
                 value={importClassId}
                 onChange={(e) => setImportClassId(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className={selectClass}
               >
                 <option value="">Select a class</option>
                 {availableClasses.map((c) => (
@@ -68,7 +70,7 @@ export function StudentsPage() {
       <Card>
         <div className="px-4 pt-4">
           <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
             <Input
               id="search"
               value={search}
@@ -79,9 +81,9 @@ export function StudentsPage() {
           </div>
         </div>
         {loading ? (
-          <CardContent className="py-8 text-center text-slate-400">Loading...</CardContent>
+          <CardContent className="py-8 text-center text-muted">Loading...</CardContent>
         ) : students.length === 0 ? (
-          <CardContent className="py-8 text-center text-slate-500">
+          <CardContent className="py-8 text-center text-muted">
             {search ? 'No students match your search' : 'No students yet'}
           </CardContent>
         ) : (
@@ -97,16 +99,16 @@ export function StudentsPage() {
             <TBody>
               {students.map((s) => (
                 <tr key={s.id}>
-                  <Td className="font-mono text-sm">{s.student_id}</Td>
-                  <Td className="font-medium text-slate-900">{s.name}</Td>
+                  <Td className="font-mono text-sm text-muted">{s.student_id}</Td>
+                  <Td className="font-medium text-text">{s.name}</Td>
                   <Td><Badge variant="info">Active</Badge></Td>
                   <Td>
                     <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => { setEditStudent(s); setShowForm(true) }}>
+                      <Button variant="ghost" size="sm" onClick={() => { setEditStudent({ id: s.id, student_id: s.student_id, name: s.name, class_id: s.class_id ?? undefined }); setShowForm(true) }}>
                         <Pencil size={16} />
                       </Button>
                       <Button variant="ghost" size="sm" onClick={() => setConfirmDelete(s.id)}>
-                        <Trash2 size={16} className="text-red-500" />
+                        <Trash2 size={16} className="text-error" />
                       </Button>
                     </div>
                   </Td>
@@ -132,7 +134,7 @@ export function StudentsPage() {
       </Modal>
 
       <Modal open={!!confirmDelete} onClose={() => setConfirmDelete(null)} title="Delete Student">
-        <p className="text-sm text-slate-600 mb-4">Are you sure? This will permanently delete the student and all their data.</p>
+        <p className="text-sm text-secondary mb-4">Are you sure? This will permanently delete the student and all their data.</p>
         <div className="flex justify-end gap-3">
           <Button variant="secondary" onClick={() => setConfirmDelete(null)}>Cancel</Button>
           <Button variant="danger" onClick={async () => {

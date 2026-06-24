@@ -34,20 +34,20 @@ export function ExpensesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Expenses</h1>
-          <p className="text-sm text-slate-500">Total spent: <span className="font-semibold text-red-600">{formatCurrency(total)}</span></p>
+          <h1 className="text-2xl font-bold text-text">Expenses</h1>
+          <p className="text-sm text-muted">Total spent: <span className="font-semibold text-error">{formatCurrency(total)}</span></p>
         </div>
         <Button onClick={() => setShowForm(true)}><Plus size={16} /> Record Expense</Button>
       </div>
 
       <Card>
         {loading ? (
-          <CardContent className="py-8 text-center text-slate-400">Loading...</CardContent>
+          <CardContent className="py-8 text-center text-muted">Loading...</CardContent>
         ) : expenses.length === 0 ? (
-          <CardContent className="flex flex-col items-center gap-3 py-12 text-slate-500">
-            <Receipt size={40} className="text-slate-300" />
+          <CardContent className="flex flex-col items-center gap-3 py-12 text-muted">
+            <Receipt size={40} className="text-muted/50" />
             <p>No expenses recorded yet</p>
           </CardContent>
         ) : (
@@ -63,13 +63,13 @@ export function ExpensesPage() {
             <TBody>
               {expenses.map((e) => (
                 <tr key={e.id}>
-                  <Td className="font-medium text-slate-900">{e.description}</Td>
-                  <Td className="font-semibold text-red-600">{formatCurrency(Number(e.amount))}</Td>
-                  <Td>{formatDate(e.date)}</Td>
+                  <Td className="font-medium text-text">{e.description}</Td>
+                  <Td className="font-semibold text-error tabular-nums">{formatCurrency(Number(e.amount))}</Td>
+                  <Td className="text-secondary">{formatDate(e.date)}</Td>
                   <Td>
                     <div className="flex justify-end">
                       <Button variant="ghost" size="sm" onClick={() => remove(e.id)}>
-                        <Trash2 size={16} className="text-red-500" />
+                        <Trash2 size={16} className="text-error" />
                       </Button>
                     </div>
                   </Td>
@@ -109,7 +109,7 @@ export function ExpensesPage() {
             onChange={(e) => setDate(e.target.value)}
             required
           />
-          {error && <p className="text-sm text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+          {error && <p className="text-sm text-error bg-error/10 rounded-btn px-3 py-2 border border-error/20">{error}</p>}
           <div className="flex justify-end gap-3">
             <Button type="button" variant="secondary" onClick={() => setShowForm(false)}>Cancel</Button>
             <Button type="submit" loading={submitting}>Save</Button>

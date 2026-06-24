@@ -29,18 +29,18 @@ export function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
+      <h1 className="text-2xl font-bold text-text">Settings</h1>
 
       {isSuperAdmin && (
         <Card>
           <CardContent>
-            <h2 className="text-lg font-semibold text-slate-900 mb-4">Create Admin</h2>
+            <h2 className="text-lg font-semibold text-text mb-4">Create Admin</h2>
             <form onSubmit={handleCreateAdmin} className="space-y-4 max-w-md">
               <Input id="admin-sid" label="Admin ID" value={sid} onChange={(e) => setSid(e.target.value)} required />
               <Input id="admin-name" label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
               <Input id="admin-pwd" label="Password" type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} required />
               <Button type="submit" loading={loading}>Create Admin</Button>
-              {msg && <p className="text-sm text-slate-600">{msg}</p>}
+              {msg && <p className="text-sm text-secondary">{msg}</p>}
             </form>
           </CardContent>
         </Card>

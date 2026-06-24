@@ -44,7 +44,7 @@ export function DashboardPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 size={32} className="animate-spin text-slate-400" />
+        <Loader2 size={32} className="animate-spin text-muted" />
       </div>
     )
   }
@@ -52,16 +52,16 @@ export function DashboardPage() {
   if (!data) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-text">Dashboard</h1>
         {user?.role === 'super_admin' ? (
           <Card>
             <CardContent className="py-5">
               <div className="flex items-center gap-2 mb-4">
-                <Shield size={20} className="text-indigo-600" />
-                <h2 className="text-lg font-semibold text-slate-900">All Admins</h2>
+                <Shield size={20} className="text-brand-600" />
+                <h2 className="text-lg font-semibold text-text">All Admins</h2>
               </div>
               {admins.length === 0 ? (
-                <p className="text-sm text-slate-400">No admins yet</p>
+                <p className="text-sm text-muted">No admins yet</p>
               ) : (
                 <Table>
                   <THead>
@@ -74,9 +74,9 @@ export function DashboardPage() {
                   <TBody>
                     {admins.map((a) => (
                       <tr key={a.id}>
-                        <Td className="font-mono text-sm">{a.student_id}</Td>
-                        <Td className="font-medium text-slate-900">{a.name}</Td>
-                        <Td>{(adminClasses[a.id] ?? ['—']).join(', ')}</Td>
+                        <Td className="font-mono text-sm text-muted">{a.student_id}</Td>
+                        <Td className="font-medium text-text">{a.name}</Td>
+                        <Td className="text-secondary">{(adminClasses[a.id] ?? ['—']).join(', ')}</Td>
                       </tr>
                     ))}
                   </TBody>
@@ -86,7 +86,7 @@ export function DashboardPage() {
           </Card>
         ) : (
           <Card>
-            <CardContent className="py-12 text-center text-slate-500">
+            <CardContent className="py-12 text-center text-muted">
               No class assigned
             </CardContent>
           </Card>
@@ -100,45 +100,45 @@ export function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-        <p className="text-slate-500">Welcome back, {user?.name}</p>
+        <h1 className="text-2xl font-bold text-text">Dashboard</h1>
+        <p className="text-secondary">Welcome back, {user?.name}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardContent className="flex items-center gap-4 py-5">
-            <div className="rounded-lg bg-emerald-50 p-3">
-              <PiggyBank size={24} className="text-emerald-600" />
+            <div className="rounded-lg bg-success/10 p-3">
+              <PiggyBank size={24} className="text-success" />
             </div>
             <div>
-              <p className="text-sm text-slate-500">Total Contributions</p>
-              <p className="text-2xl font-bold text-slate-900">{formatCurrency(data.totalContributions)}</p>
+              <p className="text-sm text-muted">Total Contributions</p>
+              <p className="text-2xl font-bold text-text tabular-nums">{formatCurrency(data.totalContributions)}</p>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="flex items-center gap-4 py-5">
-            <div className="rounded-lg bg-red-50 p-3">
-              <Receipt size={24} className="text-red-600" />
+            <div className="rounded-lg bg-error/10 p-3">
+              <Receipt size={24} className="text-error" />
             </div>
             <div>
-              <p className="text-sm text-slate-500">Total Expenses</p>
-              <p className="text-2xl font-bold text-slate-900">{formatCurrency(data.totalExpenses)}</p>
+              <p className="text-sm text-muted">Total Expenses</p>
+              <p className="text-2xl font-bold text-text tabular-nums">{formatCurrency(data.totalExpenses)}</p>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="flex items-center gap-4 py-5">
-            <div className={`rounded-lg p-3 ${isPositive ? 'bg-blue-50' : 'bg-red-50'}`}>
+            <div className={`rounded-lg p-3 ${isPositive ? 'bg-info/10' : 'bg-error/10'}`}>
               {isPositive ? (
-                <TrendingUp size={24} className="text-blue-600" />
+                <TrendingUp size={24} className="text-info" />
               ) : (
-                <TrendingDown size={24} className="text-red-600" />
+                <TrendingDown size={24} className="text-error" />
               )}
             </div>
             <div>
-              <p className="text-sm text-slate-500">Remaining Balance</p>
-              <p className={`text-2xl font-bold ${isPositive ? 'text-slate-900' : 'text-red-600'}`}>
+              <p className="text-sm text-muted">Remaining Balance</p>
+              <p className={`text-2xl font-bold tabular-nums ${isPositive ? 'text-text' : 'text-error'}`}>
                 {formatCurrency(data.remainingBalance)}
               </p>
             </div>
@@ -146,12 +146,12 @@ export function DashboardPage() {
         </Card>
         <Card>
           <CardContent className="flex items-center gap-4 py-5">
-            <div className="rounded-lg bg-amber-50 p-3">
-              <Users size={24} className="text-amber-600" />
+            <div className="rounded-lg bg-warning/10 p-3">
+              <Users size={24} className="text-warning" />
             </div>
             <div>
-              <p className="text-sm text-slate-500">Students</p>
-              <p className="text-2xl font-bold text-slate-900">{data.totalStudents}</p>
+              <p className="text-sm text-muted">Students</p>
+              <p className="text-2xl font-bold text-text tabular-nums">{data.totalStudents}</p>
             </div>
           </CardContent>
         </Card>
@@ -159,19 +159,19 @@ export function DashboardPage() {
 
       <Card>
         <CardContent className="py-5">
-          <h2 className="text-sm font-semibold text-slate-700 mb-3">Payment Status</h2>
+          <h2 className="text-sm font-semibold text-secondary mb-3">Payment Status</h2>
           <div className="flex gap-4">
             <div className="flex items-center gap-2">
               <Badge variant="success">Paid</Badge>
-              <span className="text-sm text-slate-700">{data.paidCount}</span>
+              <span className="text-sm text-text">{data.paidCount}</span>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="warning">Partial</Badge>
-              <span className="text-sm text-slate-700">{data.partialCount}</span>
+              <span className="text-sm text-text">{data.partialCount}</span>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="danger">Unpaid</Badge>
-              <span className="text-sm text-slate-700">{data.unpaidCount}</span>
+              <span className="text-sm text-text">{data.unpaidCount}</span>
             </div>
           </div>
         </CardContent>

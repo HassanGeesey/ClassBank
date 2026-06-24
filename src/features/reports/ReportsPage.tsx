@@ -82,20 +82,20 @@ export function ReportsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Reports</h1>
-        <p className="text-slate-500">Download PDF reports</p>
+        <h1 className="text-2xl font-bold text-text">Reports</h1>
+        <p className="text-secondary">Download PDF reports</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
           <CardContent className="py-6">
             <div className="flex flex-col items-center gap-3 text-center">
-              <div className="rounded-lg bg-emerald-50 p-3">
-                <FileDown size={24} className="text-emerald-600" />
+              <div className="rounded-lg bg-success/10 p-3">
+                <FileDown size={24} className="text-success" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-900">Contributions</h3>
-                <p className="text-sm text-slate-500">{formatCurrency(contribTotal)} total</p>
+                <h3 className="font-semibold text-text">Contributions</h3>
+                <p className="text-sm text-muted">{formatCurrency(contribTotal)} total</p>
               </div>
               <Button
                 size="sm"
@@ -111,12 +111,12 @@ export function ReportsPage() {
         <Card>
           <CardContent className="py-6">
             <div className="flex flex-col items-center gap-3 text-center">
-              <div className="rounded-lg bg-red-50 p-3">
-                <Receipt size={24} className="text-red-600" />
+              <div className="rounded-lg bg-error/10 p-3">
+                <Receipt size={24} className="text-error" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-900">Expenses</h3>
-                <p className="text-sm text-slate-500">{formatCurrency(expenseTotal)} total</p>
+                <h3 className="font-semibold text-text">Expenses</h3>
+                <p className="text-sm text-muted">{formatCurrency(expenseTotal)} total</p>
               </div>
               <Button
                 size="sm"
@@ -132,12 +132,12 @@ export function ReportsPage() {
         <Card>
           <CardContent className="py-6">
             <div className="flex flex-col items-center gap-3 text-center">
-              <div className="rounded-lg bg-blue-50 p-3">
-                <Users size={24} className="text-blue-600" />
+              <div className="rounded-lg bg-info/10 p-3">
+                <Users size={24} className="text-info" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-900">Student Status</h3>
-                <p className="text-sm text-slate-500">{formatCurrency(remaining)} remaining</p>
+                <h3 className="font-semibold text-text">Student Status</h3>
+                <p className="text-sm text-muted">{formatCurrency(remaining)} remaining</p>
               </div>
               <Button
                 size="sm"

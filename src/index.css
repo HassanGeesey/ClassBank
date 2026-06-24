@@ -1,7 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-sans: 'Instrument Sans', sans-serif;
+  --font-serif: 'Instrument Serif', serif;
+
+  --color-bg-main: #F4F6FA;
+  --color-bg-card: #FFFFFF;
+  --color-bg-sidebar: #FFFFFF;
+  --color-bg-elevated: #F1F3F6;
+
+  --color-brand-900: #1B3A5C;
+  --color-brand-600: #2D6BFF;
+  --color-brand-50: #EEF3FF;
+
+  --color-text: #0F172A;
+  --color-secondary: #5A6A7E;
+  --color-muted: #94A3B8;
+
+  --color-border: #E8ECF0;
+  --color-border-hover: #D0D6DD;
+
+  --color-success: #0C9B5E;
+  --color-warning: #DC8900;
+  --color-error: #DC2626;
+  --color-info: #2D6BFF;
+
+  --radius-card: 12px;
+  --radius-btn: 8px;
+}
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    @apply bg-bg-main text-text antialiased font-sans;
+  }
+  select {
+    @apply appearance-none;
   }
 }

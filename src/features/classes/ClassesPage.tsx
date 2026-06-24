@@ -22,13 +22,13 @@ export function ClassesPage() {
   if (user?.role !== ROLES.SUPER_ADMIN) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-slate-900">My Classes</h1>
+        <h1 className="text-2xl font-bold text-text">My Classes</h1>
         {loading ? (
-          <Card><CardContent className="py-8 text-center text-slate-400">Loading...</CardContent></Card>
+          <Card><CardContent className="py-8 text-center text-muted">Loading...</CardContent></Card>
         ) : classes.length === 0 ? (
           <Card>
-            <CardContent className="py-12 flex flex-col items-center gap-3 text-slate-500">
-              <School size={40} className="text-slate-300" />
+            <CardContent className="py-12 flex flex-col items-center gap-3 text-muted">
+              <School size={40} className="text-muted/50" />
               <p>No classes assigned</p>
             </CardContent>
           </Card>
@@ -45,9 +45,9 @@ export function ClassesPage() {
               <TBody>
                 {classes.map((c) => (
                   <tr key={c.id}>
-                    <Td className="font-medium text-slate-900">{c.name}</Td>
-                    <Td>{c.contribution_target}</Td>
-                    <Td><Badge variant="default">{new Date(c.created_at).toLocaleDateString()}</Badge></Td>
+                    <Td className="font-medium text-text">{c.name}</Td>
+                    <Td className="text-secondary">{c.contribution_target}</Td>
+                    <Td className="text-secondary"><Badge variant="default">{new Date(c.created_at).toLocaleDateString()}</Badge></Td>
                   </tr>
                 ))}
               </TBody>
@@ -60,8 +60,8 @@ export function ClassesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Classes</h1>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h1 className="text-2xl font-bold text-text">Classes</h1>
         <Button onClick={() => { setEditClass(null); setShowForm(true) }}>
           <Plus size={16} /> New Class
         </Button>
@@ -69,9 +69,9 @@ export function ClassesPage() {
 
       <Card>
         {loading ? (
-          <CardContent className="py-8 text-center text-slate-400">Loading...</CardContent>
+          <CardContent className="py-8 text-center text-muted">Loading...</CardContent>
         ) : classes.length === 0 ? (
-          <CardContent className="py-8 text-center text-slate-500">No classes yet</CardContent>
+          <CardContent className="py-8 text-center text-muted">No classes yet</CardContent>
         ) : (
           <Table>
             <THead>
@@ -84,8 +84,8 @@ export function ClassesPage() {
             <TBody>
               {classes.map((c) => (
                 <tr key={c.id}>
-                  <Td className="font-medium text-slate-900">{c.name}</Td>
-                  <Td>
+                  <Td className="font-medium text-text">{c.name}</Td>
+                  <Td className="text-secondary">
                     <Badge variant="default">{new Date(c.created_at).toLocaleDateString()}</Badge>
                   </Td>
                   <Td>
@@ -97,7 +97,7 @@ export function ClassesPage() {
                         <Pencil size={16} />
                       </Button>
                       <Button variant="ghost" size="sm" onClick={() => setConfirmDelete(c.id)}>
-                        <Trash2 size={16} className="text-red-500" />
+                        <Trash2 size={16} className="text-error" />
                       </Button>
                     </div>
                   </Td>
@@ -126,7 +126,7 @@ export function ClassesPage() {
       )}
 
       <Modal open={!!confirmDelete} onClose={() => setConfirmDelete(null)} title="Delete Class">
-        <p className="text-sm text-slate-600 mb-4">Are you sure you want to delete this class? This action cannot be undone.</p>
+        <p className="text-sm text-secondary mb-4">Are you sure you want to delete this class? This action cannot be undone.</p>
         <div className="flex justify-end gap-3">
           <Button variant="secondary" onClick={() => setConfirmDelete(null)}>Cancel</Button>
           <Button variant="danger" onClick={async () => {

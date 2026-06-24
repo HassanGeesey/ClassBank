@@ -38,7 +38,7 @@ export function PasswordChangePage() {
     <div className="mx-auto max-w-md">
       <Card>
         <CardHeader>
-          <h2 className="text-lg font-semibold text-slate-900">Change Password</h2>
+          <h2 className="text-lg font-semibold text-text">Change Password</h2>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -59,8 +59,8 @@ export function PasswordChangePage() {
               required
               minLength={6}
             />
-            {error && <p className="text-sm text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-            {message && <p className="text-sm text-emerald-600 bg-emerald-50 rounded-lg px-3 py-2">{message}</p>}
+            {error && <p className="text-sm text-error bg-error/10 rounded-btn px-3 py-2 border border-error/20">{error}</p>}
+            {message && <p className="text-sm text-success bg-success/10 rounded-btn px-3 py-2 border border-success/20">{message}</p>}
             <Button type="submit" loading={loading}>Change Password</Button>
           </form>
         </CardContent>

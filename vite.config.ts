@@ -17,8 +17,8 @@ export default defineConfig({
         name: 'Class Bank',
         short_name: 'ClassBank',
         description: 'Class Contribution Transparency System',
-        theme_color: '#0f172a',
-        background_color: '#ffffff',
+        theme_color: '#F4F6FA',
+        background_color: '#F4F6FA',
         display: 'standalone',
         icons: [
           { src: '/icons/icon-192.svg', sizes: '192x192', type: 'image/svg+xml' },

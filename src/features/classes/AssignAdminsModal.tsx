@@ -43,20 +43,20 @@ export function AssignAdminsModal({ classId, className, open, onClose }: AssignA
     <Modal open={open} onClose={onClose} title={`Admins — ${className}`}>
       <div className="space-y-4">
         {message && (
-          <p className="text-sm text-slate-600 bg-slate-50 rounded-lg px-3 py-2">{message}</p>
+          <p className="text-sm text-secondary bg-bg-elevated rounded-btn px-3 py-2 border border-border">{message}</p>
         )}
 
         <div>
-          <h3 className="text-sm font-medium text-slate-700 mb-2">Current Admins</h3>
+          <h3 className="text-sm font-medium text-secondary mb-2">Current Admins</h3>
           {loadingCurrent ? (
-            <p className="text-sm text-slate-400">Loading...</p>
+            <p className="text-sm text-muted">Loading...</p>
           ) : currentAdmins.length === 0 ? (
-            <p className="text-sm text-slate-400">No admins assigned</p>
+            <p className="text-sm text-muted">No admins assigned</p>
           ) : (
             <ul className="space-y-1">
               {currentAdmins.map((admin) => (
                 <li key={admin.id} className="flex items-center justify-between py-1">
-                  <span className="text-sm text-slate-700">{admin.name} ({admin.student_id})</span>
+                  <span className="text-sm text-text">{admin.name} ({admin.student_id})</span>
                   <Button variant="ghost" size="sm" onClick={() => remove(admin)}>Remove</Button>
                 </li>
               ))}
@@ -66,11 +66,11 @@ export function AssignAdminsModal({ classId, className, open, onClose }: AssignA
 
         {availableAdmins.length > 0 && (
           <div>
-            <h3 className="text-sm font-medium text-slate-700 mb-2">Available Admins</h3>
+            <h3 className="text-sm font-medium text-secondary mb-2">Available Admins</h3>
             <ul className="space-y-1">
               {availableAdmins.map((admin) => (
                 <li key={admin.id} className="flex items-center justify-between py-1">
-                  <span className="text-sm text-slate-700">{admin.name} ({admin.student_id})</span>
+                  <span className="text-sm text-text">{admin.name} ({admin.student_id})</span>
                   <Button variant="secondary" size="sm" onClick={() => assign(admin)}>Assign</Button>
                 </li>
               ))}

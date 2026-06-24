@@ -29,6 +29,8 @@ export function StudentForm({ initial, onSave, onCancel, classId, classes }: Stu
     setLoading(false)
   }
 
+  const selectClass = 'block w-full rounded-btn border border-border-hover bg-white px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-600/30'
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
@@ -51,12 +53,12 @@ export function StudentForm({ initial, onSave, onCancel, classId, classes }: Stu
       />
       {classes && classes.length > 0 && (
         <div>
-          <label htmlFor="sclass" className="block text-sm font-medium text-slate-700 mb-1">Class</label>
+          <label htmlFor="sclass" className="block text-sm font-medium text-secondary mb-1">Class</label>
           <select
             id="sclass"
             value={selectedClassId}
             onChange={(e) => setSelectedClassId(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className={selectClass}
             required
           >
             <option value="">Select a class</option>

@@ -7,11 +7,11 @@ interface BadgeProps {
 }
 
 const variants = {
-  default: 'bg-slate-100 text-slate-700',
-  success: 'bg-emerald-50 text-emerald-700',
-  warning: 'bg-amber-50 text-amber-700',
-  danger: 'bg-red-50 text-red-700',
-  info: 'bg-blue-50 text-blue-700',
+  default: 'bg-bg-elevated text-secondary',
+  success: 'bg-success/10 text-success',
+  warning: 'bg-warning/10 text-warning',
+  danger: 'bg-error/10 text-error',
+  info: 'bg-info/10 text-info',
 }
 
 export function Badge({ children, variant = 'default' }: BadgeProps) {

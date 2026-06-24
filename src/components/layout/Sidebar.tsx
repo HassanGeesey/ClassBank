@@ -8,7 +8,6 @@ import {
   FileText,
   Settings,
   LogOut,
-  PiggyBank,
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import type { UserRole } from '../../lib/types'
@@ -41,24 +40,26 @@ const navItems: Record<UserRole, { to: string; icon: any; label: string }[]> = {
   ],
 }
 
+export { navItems }
+
 export function Sidebar({ role, onSignOut }: SidebarProps) {
   const { adminClasses, activeClassId, setActiveClassId } = useAuth()
   const items = navItems[role]
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-slate-900 text-slate-300">
-      <div className="flex items-center gap-2 px-6 py-5 border-b border-slate-800">
-        <PiggyBank size={24} className="text-emerald-400" />
-        <span className="text-lg font-semibold text-white">ClassBank</span>
+    <aside className="hidden lg:flex fixed left-0 top-0 z-40 h-screen w-64 bg-bg-sidebar text-text flex-col border-r border-border">
+      <div className="flex items-center gap-3 px-6 py-5 border-b border-border">
+        <img src="/classBankLogo.png" alt="ClassBank" className="h-8 w-auto" />
+        <span className="text-lg font-semibold text-text">ClassBank</span>
       </div>
 
       {adminClasses.length > 0 && (
         <div className="px-4 pt-4">
-          <label className="text-xs text-slate-500 mb-1 block">Active Class</label>
+          <label className="text-xs text-muted mb-1 block">Active Class</label>
           <select
             value={activeClassId ?? ''}
             onChange={(e) => setActiveClassId(e.target.value || null)}
-            className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full rounded-btn border border-border bg-white px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-600/30"
           >
             {adminClasses.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -67,17 +68,17 @@ export function Sidebar({ role, onSignOut }: SidebarProps) {
         </div>
       )}
 
-      <nav className="flex flex-col gap-1 p-4 pt-4">
+      <nav className="flex flex-col gap-1 p-4 pt-4 flex-1">
         {items.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             className={({ isActive }) =>
               cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-3 rounded-btn px-3 py-2 text-sm font-medium transition-colors',
                 isActive
-                  ? 'bg-slate-800 text-white'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
+                  ? 'bg-brand-50 text-brand-600'
+                  : 'text-secondary hover:bg-bg-elevated hover:text-text',
               )
             }
           >
@@ -87,10 +88,10 @@ export function Sidebar({ role, onSignOut }: SidebarProps) {
         ))}
       </nav>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-800">
+      <div className="p-4 border-t border-border">
         <button
           onClick={onSignOut}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors cursor-pointer"
+          className="flex w-full items-center gap-3 rounded-btn px-3 py-2 text-sm font-medium text-secondary hover:bg-bg-elevated hover:text-text transition-colors cursor-pointer"
         >
           <LogOut size={18} />
           Sign Out
