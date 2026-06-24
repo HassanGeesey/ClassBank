@@ -15,8 +15,8 @@ import { formatCurrency } from '../../lib/utils'
 import { FileText, FileDown, Receipt, Users } from 'lucide-react'
 
 export function ReportsPage() {
-  const { user } = useAuth()
-  const classId = user?.class_id
+  const { activeClassId } = useAuth()
+  const classId = activeClassId
   const { total: contribTotal } = useContributionTotals(classId)
   const { total: expenseTotal } = useExpenseTotal(classId)
   const { allStudents } = useStudents(classId)

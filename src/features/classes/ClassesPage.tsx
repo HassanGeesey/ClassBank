@@ -9,7 +9,7 @@ import { ClassForm } from './ClassForm'
 import { AssignAdminsModal } from './AssignAdminsModal'
 import { useClasses } from './useClasses'
 import { ROLES } from '../../lib/constants'
-import { Plus, Pencil, Trash2, UserPlus } from 'lucide-react'
+import { Plus, Pencil, Trash2, UserPlus, School } from 'lucide-react'
 
 export function ClassesPage() {
   const { user } = useAuth()
@@ -22,12 +22,38 @@ export function ClassesPage() {
   if (user?.role !== ROLES.SUPER_ADMIN) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-slate-900">Classes</h1>
-        <Card>
-          <CardContent className="py-8 text-center text-slate-500">
-            Your assigned class: <span className="font-medium text-slate-700">{user?.class_id ?? 'None'}</span>
-          </CardContent>
-        </Card>
+        <h1 className="text-2xl font-bold text-slate-900">My Classes</h1>
+        {loading ? (
+          <Card><CardContent className="py-8 text-center text-slate-400">Loading...</CardContent></Card>
+        ) : classes.length === 0 ? (
+          <Card>
+            <CardContent className="py-12 flex flex-col items-center gap-3 text-slate-500">
+              <School size={40} className="text-slate-300" />
+              <p>No classes assigned</p>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <Table>
+              <THead>
+                <tr>
+                  <Th>Class Name</Th>
+                  <Th>Contribution Target</Th>
+                  <Th>Created</Th>
+                </tr>
+              </THead>
+              <TBody>
+                {classes.map((c) => (
+                  <tr key={c.id}>
+                    <Td className="font-medium text-slate-900">{c.name}</Td>
+                    <Td>{c.contribution_target}</Td>
+                    <Td><Badge variant="default">{new Date(c.created_at).toLocaleDateString()}</Badge></Td>
+                  </tr>
+                ))}
+              </TBody>
+            </Table>
+          </Card>
+        )}
       </div>
     )
   }

@@ -10,8 +10,8 @@ import { formatCurrency, formatDate } from '../../lib/utils'
 import { Plus, Trash2, Receipt } from 'lucide-react'
 
 export function ExpensesPage() {
-  const { user } = useAuth()
-  const classId = user?.class_id
+  const { activeClassId } = useAuth()
+  const classId = activeClassId
   const { expenses, loading, create, remove } = useExpenses(classId)
   const { total } = useExpenseTotal(classId)
 

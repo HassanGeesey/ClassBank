@@ -11,8 +11,8 @@ import { formatCurrency, formatDate } from '../../lib/utils'
 import { Plus, Trash2, PiggyBank } from 'lucide-react'
 
 export function ContributionsPage() {
-  const { user } = useAuth()
-  const classId = user?.class_id
+  const { activeClassId } = useAuth()
+  const classId = activeClassId
   const { contributions, loading, create, remove } = useContributions(classId)
   const { total } = useContributionTotals(classId)
   const { students } = useStudents(classId)

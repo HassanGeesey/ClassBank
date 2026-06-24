@@ -10,8 +10,8 @@ import { PiggyBank, Receipt, Users, Loader2, TrendingDown, TrendingUp, Shield } 
 import type { Profile } from '../../lib/types'
 
 export function DashboardPage() {
-  const { user } = useAuth()
-  const classId = user?.class_id
+  const { user, activeClassId } = useAuth()
+  const classId = activeClassId
   const { data, loading } = useDashboard(classId)
   const [admins, setAdmins] = useState<Profile[]>([])
   const [adminClasses, setAdminClasses] = useState<Record<string, string[]>>({})

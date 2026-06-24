@@ -1,3 +1,4 @@
+import { useAuth } from '../../features/auth/AuthContext'
 import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -17,7 +18,7 @@ interface SidebarProps {
   onSignOut: () => void
 }
 
-const navItems = {
+const navItems: Record<UserRole, { to: string; icon: any; label: string }[]> = {
   super_admin: [
     { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/classes', icon: Users, label: 'Classes' },
@@ -41,6 +42,7 @@ const navItems = {
 }
 
 export function Sidebar({ role, onSignOut }: SidebarProps) {
+  const { adminClasses, activeClassId, setActiveClassId } = useAuth()
   const items = navItems[role]
 
   return (
@@ -50,7 +52,22 @@ export function Sidebar({ role, onSignOut }: SidebarProps) {
         <span className="text-lg font-semibold text-white">ClassBank</span>
       </div>
 
-      <nav className="flex flex-col gap-1 p-4">
+      {adminClasses.length > 0 && (
+        <div className="px-4 pt-4">
+          <label className="text-xs text-slate-500 mb-1 block">Active Class</label>
+          <select
+            value={activeClassId ?? ''}
+            onChange={(e) => setActiveClassId(e.target.value || null)}
+            className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            {adminClasses.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      <nav className="flex flex-col gap-1 p-4 pt-4">
         {items.map((item) => (
           <NavLink
             key={item.to}

@@ -12,8 +12,8 @@ import { useStudents } from './useStudents'
 import { Search, Plus, Pencil, Trash2 } from 'lucide-react'
 
 export function StudentsPage() {
-  const { user } = useAuth()
-  const { students, loading, search, setSearch, create, update, remove, importCSV } = useStudents(user?.class_id)
+  const { activeClassId } = useAuth()
+  const { students, loading, search, setSearch, create, update, remove, importCSV } = useStudents(activeClassId)
 
   const [showForm, setShowForm] = useState(false)
   const [editStudent, setEditStudent] = useState<{ id: string; student_id: string; name: string } | null>(null)
