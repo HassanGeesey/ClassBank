@@ -64,7 +64,7 @@ const server = createServer(async (req, res) => {
       let body = ''
       req.on('data', (c) => (body += c))
       req.on('end', async () => {
-        const { student_id, name, password, class_id } = JSON.parse(body)
+        const { student_id, name, password, class_id, role } = JSON.parse(body)
         const email = `${student_id}@${AUTH_DOMAIN}`
         const r = await fetchAdmin('POST', '/users', {
           email,
@@ -85,7 +85,7 @@ const server = createServer(async (req, res) => {
             id: r.data.id,
             student_id,
             name,
-            role: 'student',
+            role: role || 'student',
             class_id: class_id || null,
           }),
         })
