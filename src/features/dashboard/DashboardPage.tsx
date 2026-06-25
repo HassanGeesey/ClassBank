@@ -37,12 +37,13 @@ function StudentDashboard({ userId, classId }: { userId: string; classId: string
   }
 
   const badgeVariant = data.status === 'paid' ? 'success' : data.status === 'partial' ? 'warning' : 'danger'
+  const isPositive = data.remainingBalance >= 0
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-text">{t('dashboard.title')}</h1>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardContent className="flex items-center gap-4 py-5">
             <div className="rounded-lg bg-success/10 p-3">
@@ -56,12 +57,40 @@ function StudentDashboard({ userId, classId }: { userId: string; classId: string
         </Card>
         <Card>
           <CardContent className="flex items-center gap-4 py-5">
+            <div className="rounded-lg bg-brand-600/10 p-3">
+              <Users size={24} className="text-brand-600" />
+            </div>
+            <div>
+              <p className="text-sm text-muted">{t('dashboard.totalContributions')}</p>
+              <p className="text-2xl font-bold text-text tabular-nums">{formatCurrency(data.classTotal)}</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 py-5">
             <div className="rounded-lg bg-error/10 p-3">
               <Receipt size={24} className="text-error" />
             </div>
             <div>
               <p className="text-sm text-muted">{t('dashboard.totalExpenses')}</p>
               <p className="text-2xl font-bold text-text tabular-nums">{formatCurrency(data.expenseTotal)}</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 py-5">
+            <div className={`rounded-lg p-3 ${isPositive ? 'bg-info/10' : 'bg-error/10'}`}>
+              {isPositive ? (
+                <TrendingUp size={24} className="text-info" />
+              ) : (
+                <TrendingDown size={24} className="text-error" />
+              )}
+            </div>
+            <div>
+              <p className="text-sm text-muted">{t('dashboard.remainingBalance')}</p>
+              <p className={`text-2xl font-bold tabular-nums ${isPositive ? 'text-text' : 'text-error'}`}>
+                {formatCurrency(data.remainingBalance)}
+              </p>
             </div>
           </CardContent>
         </Card>
