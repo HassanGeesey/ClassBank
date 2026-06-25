@@ -203,6 +203,12 @@
       "assign": "U xilsaar"
     }
   },
+  "aiChat": {
+    "title": "Kaaliyaha AI",
+    "placeholder": "Kaalmooyinka wax waydii...",
+    "thinking": "Waxaan ka fekerayaa...",
+    "error": "Waan qalday, fadlan isku day mar kale."
+  },
   "reports": {
     "title": "Warbixinno",
     "subtitle": "Warbixinta dhaqaale ee fasalka",

@@ -102,6 +102,37 @@ const server = createServer(async (req, res) => {
       const id = path.slice(11)
       await fetchAdmin('DELETE', `/users/${id}`)
       json(res, 200, { ok: true })
+    } else if (req.method === 'POST' && path === '/api/chat') {
+      let body = ''
+      req.on('data', (c) => (body += c))
+      req.on('end', async () => {
+        const { question, context } = JSON.parse(body)
+        const systemPrompt = 'You are a class contribution assistant. Answer questions using the provided class data. Be concise and use USD formatting. If the data doesn\'t contain the answer, say so.'
+        const userPrompt = `Class data:\n${JSON.stringify(context, null, 2)}\n\nQuestion: ${question}`
+
+        try {
+          const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${env.OPENROUTER_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'google/gemini-2.0-flash-lite-001',
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userPrompt },
+              ],
+              max_tokens: 512,
+            }),
+          })
+          const data = await r.json()
+          const answer = data.choices?.[0]?.message?.content ?? 'No response'
+          json(res, 200, { answer })
+        } catch (e) {
+          json(res, 500, { error: e.message })
+        }
+      })
     } else {
       json(res, 404, { error: 'Not found' })
     }

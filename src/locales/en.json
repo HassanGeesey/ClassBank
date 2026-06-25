@@ -205,6 +205,12 @@
       "assign": "Assign"
     }
   },
+  "aiChat": {
+    "title": "AI Assistant",
+    "placeholder": "Ask about contributions...",
+    "thinking": "Thinking...",
+    "error": "Sorry, I couldn't process that request."
+  },
   "reports": {
     "title": "Reports",
     "subtitle": "Download PDF reports",
