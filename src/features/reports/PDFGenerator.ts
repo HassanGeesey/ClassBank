@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import 'jspdf-autotable'
 import { formatCurrency } from '../../lib/utils'
 import i18n from '../../lib/i18n'
 import type { Contribution, Expense, Profile } from '../../lib/types'
@@ -7,6 +7,14 @@ import type { Contribution, Expense, Profile } from '../../lib/types'
 interface ContributionWithStudent extends Contribution {
   profiles: { student_id: string; name: string }
 }
+
+function hexToRgb(hex: string): [number, number, number] {
+  const v = parseInt(hex.replace('#', ''), 16)
+  return [(v >> 16) & 255, (v >> 8) & 255, v & 255]
+}
+
+const darkBg = hexToRgb('#0f172a')
+const altBg = hexToRgb('#f8fafc')
 
 export async function generateContributionReport(
   title: string,
@@ -20,18 +28,25 @@ export async function generateContributionReport(
   doc.text(i18n.t('pdf.generated', { date: new Date().toLocaleDateString() }), 14, 30)
   doc.text(i18n.t('pdf.totalContributions', { currency: formatCurrency(total) }), 14, 36)
 
-  const rows = [[i18n.t('pdf.columns.studentId'), i18n.t('pdf.columns.name'), i18n.t('pdf.columns.amount'), i18n.t('pdf.columns.date')]]
-  contributions.forEach((c) => {
-    rows.push([
+  doc.autoTable({
+    startY: 44,
+    head: [[i18n.t('pdf.columns.studentId'), i18n.t('pdf.columns.name'), i18n.t('pdf.columns.amount'), i18n.t('pdf.columns.date')]],
+    body: contributions.map((c) => [
       c.profiles?.student_id ?? '',
       c.profiles?.name ?? '',
       formatCurrency(Number(c.amount)),
       new Date(c.date).toLocaleDateString(),
-    ])
+    ]),
+    theme: 'grid',
+    headStyles: { fillColor: darkBg, textColor: 255, fontStyle: 'bold' },
+    alternateRowStyles: { fillColor: altBg },
+    columnStyles: {
+      2: { halign: 'right' },
+      3: { halign: 'right' },
+    },
+    margin: { horizontal: 10 },
   })
 
-  const table = buildTable(rows)
-  doc.addImage(await tableToImage(table, doc), 'PNG', 10, 44, 190, 0)
   doc.save('contributions-report.pdf')
 }
 
@@ -47,17 +62,24 @@ export async function generateExpenseReport(
   doc.text(i18n.t('pdf.generated', { date: new Date().toLocaleDateString() }), 14, 30)
   doc.text(i18n.t('pdf.totalExpenses', { currency: formatCurrency(total) }), 14, 36)
 
-  const rows = [[i18n.t('pdf.columns.description'), i18n.t('pdf.columns.amount'), i18n.t('pdf.columns.date')]]
-  expenses.forEach((e) => {
-    rows.push([
+  doc.autoTable({
+    startY: 44,
+    head: [[i18n.t('pdf.columns.description'), i18n.t('pdf.columns.amount'), i18n.t('pdf.columns.date')]],
+    body: expenses.map((e) => [
       e.description,
       formatCurrency(Number(e.amount)),
       new Date(e.date).toLocaleDateString(),
-    ])
+    ]),
+    theme: 'grid',
+    headStyles: { fillColor: darkBg, textColor: 255, fontStyle: 'bold' },
+    alternateRowStyles: { fillColor: altBg },
+    columnStyles: {
+      1: { halign: 'right' },
+      2: { halign: 'right' },
+    },
+    margin: { horizontal: 10 },
   })
 
-  const table = buildTable(rows)
-  doc.addImage(await tableToImage(table, doc), 'PNG', 10, 44, 190, 0)
   doc.save('expenses-report.pdf')
 }
 
@@ -75,59 +97,24 @@ export async function generateStudentStatusReport(
   doc.text(i18n.t('pdf.targetPerStudent', { currency: formatCurrency(target) }), 14, 36)
 
   const t = i18n.t
-  const rows = [[t('pdf.columns.studentId'), t('pdf.columns.name'), t('pdf.columns.totalPaid'), t('pdf.columns.status')]]
-  students.forEach((s) => {
-    const paid = studentTotals[s.id] ?? 0
-    const status = paid >= target ? t('pdf.status.paid') : paid > 0 ? t('pdf.status.partial') : t('pdf.status.unpaid')
-    rows.push([s.student_id, s.name, formatCurrency(paid), status])
+
+  doc.autoTable({
+    startY: 44,
+    head: [[t('pdf.columns.studentId'), t('pdf.columns.name'), t('pdf.columns.totalPaid'), t('pdf.columns.status')]],
+    body: students.map((s) => {
+      const paid = studentTotals[s.id] ?? 0
+      const status = paid >= target ? t('pdf.status.paid') : paid > 0 ? t('pdf.status.partial') : t('pdf.status.unpaid')
+      return [s.student_id, s.name, formatCurrency(paid), status]
+    }),
+    theme: 'grid',
+    headStyles: { fillColor: darkBg, textColor: 255, fontStyle: 'bold' },
+    alternateRowStyles: { fillColor: altBg },
+    columnStyles: {
+      2: { halign: 'right' },
+      3: { halign: 'center' },
+    },
+    margin: { horizontal: 10 },
   })
 
-  const table = buildTable(rows)
-  doc.addImage(await tableToImage(table, doc), 'PNG', 10, 44, 190, 0)
   doc.save('student-status-report.pdf')
-}
-
-function buildTable(rows: string[][]) {
-  const table = document.createElement('table')
-  table.style.width = '100%'
-  table.style.borderCollapse = 'collapse'
-  table.style.fontSize = '10px'
-  table.style.fontFamily = 'monospace'
-
-  rows.forEach((row, i) => {
-    const tr = document.createElement('tr')
-    if (i === 0) {
-      tr.style.backgroundColor = '#0f172a'
-      tr.style.color = '#fff'
-      tr.style.fontWeight = 'bold'
-    } else if (i % 2 === 0) {
-      tr.style.backgroundColor = '#f8fafc'
-    }
-    row.forEach((cell) => {
-      const td = document.createElement(i === 0 ? 'th' : 'td')
-      td.textContent = cell
-      td.style.padding = '4px 8px'
-      td.style.border = '1px solid #e2e8f0'
-      td.style.textAlign = ['Amount', 'Total Paid', 'Status', 'Date'].some((h) =>
-        cell.includes(h),
-      )
-        ? 'right'
-        : 'left'
-      tr.appendChild(td)
-    })
-    table.appendChild(tr)
-  })
-  return table
-}
-
-async function tableToImage(table: HTMLTableElement, _doc: jsPDF) {
-  const wrapper = document.createElement('div')
-  wrapper.style.position = 'absolute'
-  wrapper.style.left = '-9999px'
-  wrapper.appendChild(table)
-  document.body.appendChild(wrapper)
-
-  const canvas = await html2canvas(table, { scale: 2 })
-  document.body.removeChild(wrapper)
-  return canvas.toDataURL('image/png')
 }

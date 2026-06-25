@@ -115,6 +115,7 @@
       "title": "Record Contribution",
       "student": "Student",
       "selectStudent": "Select student...",
+      "searchStudent": "Search students...",
       "amount": "Amount",
       "amountPlaceholder": "0.00",
       "date": "Date",

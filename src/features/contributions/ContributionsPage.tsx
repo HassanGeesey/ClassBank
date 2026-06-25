@@ -9,7 +9,7 @@ import { Table, TBody, Td, Th, THead } from '../../components/ui/Table'
 import { Modal } from '../../components/ui/Modal'
 import { useContributions, useContributionTotals } from './useContributions'
 import { formatCurrency, formatDate } from '../../lib/utils'
-import { Plus, Trash2, PiggyBank } from 'lucide-react'
+import { Plus, Trash2, PiggyBank, Search } from 'lucide-react'
 
 export function ContributionsPage() {
   const { t } = useTranslation()
@@ -17,7 +17,7 @@ export function ContributionsPage() {
   const classId = activeClassId
   const { contributions, loading, create, remove } = useContributions(classId)
   const { total } = useContributionTotals(classId)
-  const { students } = useStudents(classId)
+  const { students, search, setSearch } = useStudents(classId)
 
   const [showForm, setShowForm] = useState(false)
   const [selectedStudent, setSelectedStudent] = useState('')
@@ -32,7 +32,7 @@ export function ContributionsPage() {
     setSubmitting(true)
     const err = await create(selectedStudent, parseFloat(amount), date)
     if (err) setError(err)
-    else { setShowForm(false); setSelectedStudent(''); setAmount(''); setError('') }
+    else { setShowForm(false); setSelectedStudent(''); setAmount(''); setSearch(''); setError('') }
     setSubmitting(false)
   }
 
@@ -88,10 +88,20 @@ export function ContributionsPage() {
         )}
       </Card>
 
-      <Modal open={showForm} onClose={() => setShowForm(false)} title={t('contributions.modal.title')}>
+      <Modal open={showForm} onClose={() => { setShowForm(false); setSearch('') }} title={t('contributions.modal.title')}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
             <label htmlFor="student" className="block text-sm font-medium text-secondary">{t('contributions.modal.student')}</label>
+            <div className="relative mb-2">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t('contributions.modal.searchStudent')}
+                className="w-full rounded-btn border border-border-hover bg-white pl-9 pr-3 py-2 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-brand-600/30"
+              />
+            </div>
             <select
               id="student"
               value={selectedStudent}
