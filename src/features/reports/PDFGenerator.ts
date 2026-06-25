@@ -101,11 +101,13 @@ export async function generateStudentStatusReport(
   autoTable(doc, {
     startY: 44,
     head: [[t('pdf.columns.studentId'), t('pdf.columns.name'), t('pdf.columns.totalPaid'), t('pdf.columns.status')]],
-    body: students.map((s) => {
-      const paid = studentTotals[s.id] ?? 0
-      const status = paid >= target ? t('pdf.status.paid') : paid > 0 ? t('pdf.status.partial') : t('pdf.status.unpaid')
-      return [s.student_id, s.name, formatCurrency(paid), status]
-    }),
+    body: students
+      .filter((s) => (studentTotals[s.id] ?? 0) > 0)
+      .map((s) => {
+        const paid = studentTotals[s.id] ?? 0
+        const status = paid >= target ? t('pdf.status.paid') : paid > 0 ? t('pdf.status.partial') : t('pdf.status.unpaid')
+        return [s.student_id, s.name, formatCurrency(paid), status]
+      }),
     theme: 'grid',
     headStyles: { fillColor: darkBg, textColor: 255, fontStyle: 'bold' },
     alternateRowStyles: { fillColor: altBg },
