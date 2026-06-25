@@ -8,6 +8,7 @@ import {
   MoreHorizontal,
   X,
   LogOut,
+  Globe,
 } from 'lucide-react'
 import type { UserRole } from '../../lib/types'
 
@@ -18,12 +19,16 @@ interface AppShellProps {
 }
 
 function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [showMore, setShowMore] = useState(false)
   const items = navItems[role]
   const maxVisible = 5
   const visible = items.slice(0, maxVisible)
   const overflow = items.slice(maxVisible)
+  const languages = [
+    { code: 'en', label: 'English' },
+    { code: 'so', label: 'Soomaali' },
+  ]
 
   return (
     <>
@@ -84,9 +89,21 @@ function BottomNav({ role, onSignOut }: { role: UserRole; onSignOut: () => void 
                 </NavLink>
               ))}
             </div>
+            <div className="flex items-center gap-2 px-3 py-2 mt-4">
+              <Globe size={16} className="text-muted shrink-0" />
+              <select
+                value={i18n.language}
+                onChange={(e) => i18n.changeLanguage(e.target.value)}
+                className="flex-1 rounded-btn border border-border bg-white px-2 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-600/30"
+              >
+                {languages.map((l) => (
+                  <option key={l.code} value={l.code}>{l.label}</option>
+                ))}
+              </select>
+            </div>
             <button
               onClick={() => { setShowMore(false); onSignOut() }}
-              className="flex w-full items-center gap-3 rounded-btn px-3 py-2.5 text-sm font-medium text-secondary hover:bg-bg-elevated hover:text-text transition-colors mt-4 cursor-pointer"
+              className="flex w-full items-center gap-3 rounded-btn px-3 py-2.5 text-sm font-medium text-secondary hover:bg-bg-elevated hover:text-text transition-colors cursor-pointer"
             >
               <LogOut size={18} />
               {t('nav.signOut')}
