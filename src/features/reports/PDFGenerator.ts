@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+import autoTable from 'jspdf-autotable'
 import { formatCurrency } from '../../lib/utils'
 import i18n from '../../lib/i18n'
 import type { Contribution, Expense, Profile } from '../../lib/types'
@@ -28,7 +28,7 @@ export async function generateContributionReport(
   doc.text(i18n.t('pdf.generated', { date: new Date().toLocaleDateString() }), 14, 30)
   doc.text(i18n.t('pdf.totalContributions', { currency: formatCurrency(total) }), 14, 36)
 
-  doc.autoTable({
+  autoTable(doc, {
     startY: 44,
     head: [[i18n.t('pdf.columns.studentId'), i18n.t('pdf.columns.name'), i18n.t('pdf.columns.amount'), i18n.t('pdf.columns.date')]],
     body: contributions.map((c) => [
@@ -62,7 +62,7 @@ export async function generateExpenseReport(
   doc.text(i18n.t('pdf.generated', { date: new Date().toLocaleDateString() }), 14, 30)
   doc.text(i18n.t('pdf.totalExpenses', { currency: formatCurrency(total) }), 14, 36)
 
-  doc.autoTable({
+  autoTable(doc, {
     startY: 44,
     head: [[i18n.t('pdf.columns.description'), i18n.t('pdf.columns.amount'), i18n.t('pdf.columns.date')]],
     body: expenses.map((e) => [
@@ -98,7 +98,7 @@ export async function generateStudentStatusReport(
 
   const t = i18n.t
 
-  doc.autoTable({
+  autoTable(doc, {
     startY: 44,
     head: [[t('pdf.columns.studentId'), t('pdf.columns.name'), t('pdf.columns.totalPaid'), t('pdf.columns.status')]],
     body: students.map((s) => {
