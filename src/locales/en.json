@@ -44,6 +44,10 @@
     "partial": "Partial",
     "unpaid": "Unpaid",
     "noClassAssigned": "No class assigned",
+    "myContributions": "My Contributions",
+    "myStatus": "My Status",
+    "myTarget": "Target per Student",
+    "contributionHistory": "My Contribution History",
     "loading": "Loading...",
     "superAdmin": {
       "title": "All Admins",

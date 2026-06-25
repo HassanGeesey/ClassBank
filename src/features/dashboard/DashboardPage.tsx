@@ -6,14 +6,127 @@ import { Card, CardContent } from '../../components/ui/Card'
 import { Table, TBody, Td, Th, THead } from '../../components/ui/Table'
 import { Badge } from '../../components/ui/Badge'
 import { useDashboard } from './useDashboard'
-import { formatCurrency } from '../../lib/utils'
-import { PiggyBank, Receipt, Users, Loader2, TrendingDown, TrendingUp, Shield } from 'lucide-react'
+import { useStudentDashboard } from './useStudentDashboard'
+import { formatCurrency, formatDate } from '../../lib/utils'
+import { PiggyBank, Receipt, Users, Loader2, TrendingDown, TrendingUp, Shield, Target, CircleCheck } from 'lucide-react'
 import type { Profile } from '../../lib/types'
+
+function StudentDashboard({ userId, classId }: { userId: string; classId: string | null }) {
+  const { t } = useTranslation()
+  const { data, loading } = useStudentDashboard(userId, classId)
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 size={32} className="animate-spin text-muted" />
+      </div>
+    )
+  }
+
+  if (!data) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold text-text">{t('dashboard.title')}</h1>
+        <Card>
+          <CardContent className="py-12 text-center text-muted">
+            {t('dashboard.noClassAssigned')}
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  const badgeVariant = data.status === 'paid' ? 'success' : data.status === 'partial' ? 'warning' : 'danger'
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold text-text">{t('dashboard.title')}</h1>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardContent className="flex items-center gap-4 py-5">
+            <div className="rounded-lg bg-success/10 p-3">
+              <PiggyBank size={24} className="text-success" />
+            </div>
+            <div>
+              <p className="text-sm text-muted">{t('dashboard.myContributions')}</p>
+              <p className="text-2xl font-bold text-text tabular-nums">{formatCurrency(data.personalTotal)}</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 py-5">
+            <div className="rounded-lg bg-error/10 p-3">
+              <Receipt size={24} className="text-error" />
+            </div>
+            <div>
+              <p className="text-sm text-muted">{t('dashboard.totalExpenses')}</p>
+              <p className="text-2xl font-bold text-text tabular-nums">{formatCurrency(data.expenseTotal)}</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 py-5">
+            <div className="rounded-lg bg-info/10 p-3">
+              <CircleCheck size={24} className="text-info" />
+            </div>
+            <div>
+              <p className="text-sm text-muted">{t('dashboard.myStatus')}</p>
+              <Badge variant={badgeVariant}>{t(`dashboard.${data.status}`)}</Badge>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 py-5">
+            <div className="rounded-lg bg-warning/10 p-3">
+              <Target size={24} className="text-warning" />
+            </div>
+            <div>
+              <p className="text-sm text-muted">{t('dashboard.myTarget')}</p>
+              <p className="text-2xl font-bold text-text tabular-nums">{formatCurrency(data.target)}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardContent className="py-5">
+          <h2 className="text-sm font-semibold text-secondary mb-3">{t('dashboard.contributionHistory')}</h2>
+          {data.contributions.length === 0 ? (
+            <p className="text-sm text-muted">{t('contributions.none')}</p>
+          ) : (
+            <Table>
+              <THead>
+                <tr>
+                  <Th>{t('contributions.columns.date')}</Th>
+                  <Th>{t('contributions.columns.amount')}</Th>
+                </tr>
+              </THead>
+              <TBody>
+                {data.contributions.map((c) => (
+                  <tr key={c.id}>
+                    <Td className="text-secondary">{formatDate(c.date)}</Td>
+                    <Td className="font-semibold text-success tabular-nums">{formatCurrency(Number(c.amount))}</Td>
+                  </tr>
+                ))}
+              </TBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
 
 export function DashboardPage() {
   const { t } = useTranslation()
   const { user, activeClassId } = useAuth()
   const classId = activeClassId
+
+  if (user?.role === 'student') {
+    return <StudentDashboard userId={user.id} classId={classId} />
+  }
+
   const { data, loading } = useDashboard(classId)
   const [admins, setAdmins] = useState<Profile[]>([])
   const [adminClasses, setAdminClasses] = useState<Record<string, string[]>>({})
