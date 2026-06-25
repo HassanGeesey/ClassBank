@@ -11,7 +11,8 @@ import { Badge } from '../../components/ui/Badge'
 import { StudentForm } from './StudentForm'
 import { StudentImport } from './StudentImport'
 import { useStudents } from './useStudents'
-import { Search, Plus, Pencil, Trash2 } from 'lucide-react'
+import { formatCurrency } from '../../lib/utils'
+import { Search, Plus, Pencil, Trash2, Wallet } from 'lucide-react'
 
 export function StudentsPage() {
   const { t } = useTranslation()
@@ -32,6 +33,21 @@ export function StudentsPage() {
   const [showImport, setShowImport] = useState(false)
   const [importClassId, setImportClassId] = useState('')
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+
+  const [studentTotals, setStudentTotals] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    if (!activeClassId) return
+    supabase.rpc('get_student_payment_status', { p_class_id: activeClassId }).then(({ data }) => {
+      if (data) {
+        const map: Record<string, number> = {}
+        for (const row of data as { student_id: string; total: number }[]) {
+          map[row.student_id] = row.total
+        }
+        setStudentTotals(map)
+      }
+    })
+  }, [activeClassId])
 
   const selectClass = 'w-full rounded-btn border border-border-hover bg-white px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-600/30'
 
@@ -95,6 +111,7 @@ export function StudentsPage() {
                 <Th>{t('students.columns.studentId')}</Th>
                 <Th>{t('students.columns.name')}</Th>
                 <Th>{t('students.columns.status')}</Th>
+                <Th className="text-right">{t('students.columns.totalContributed')}</Th>
                 <Th className="text-right">{t('students.columns.actions')}</Th>
               </tr>
             </THead>
@@ -104,6 +121,12 @@ export function StudentsPage() {
                   <Td className="font-mono text-sm text-muted">{s.student_id}</Td>
                   <Td className="font-medium text-text">{s.name}</Td>
                   <Td><Badge variant="info">{t('students.active')}</Badge></Td>
+                  <Td className="text-right font-semibold tabular-nums text-text">
+                    <span className="inline-flex items-center gap-1">
+                      <Wallet size={14} className="text-muted" />
+                      {formatCurrency(studentTotals[s.id] ?? 0)}
+                    </span>
+                  </Td>
                   <Td>
                     <div className="flex justify-end gap-2">
                       <Button variant="ghost" size="sm" onClick={() => { setEditStudent({ id: s.id, student_id: s.student_id, name: s.name, class_id: s.class_id ?? undefined }); setShowForm(true) }}>

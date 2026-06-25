@@ -70,6 +70,7 @@
       "studentId": "Student ID",
       "name": "Name",
       "status": "Status",
+      "totalContributed": "Total Contributed",
       "actions": "Actions"
     },
     "active": "Active",
