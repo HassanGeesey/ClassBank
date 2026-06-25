@@ -27,17 +27,17 @@ export function useStudentDashboard(userId?: string | null, classId?: string | n
 
     Promise.all([
       supabase.from('contributions').select('id, amount, date').eq('student_id', userId).eq('class_id', classId).order('date', { ascending: false }),
-      supabase.from('contributions').select('amount').eq('class_id', classId),
+      supabase.rpc('get_student_payment_status', { p_class_id: classId }),
       supabase.from('expenses').select('amount').eq('class_id', classId),
       supabase.from('classes').select('contribution_target').eq('id', classId).single(),
-    ]).then(([myContribRes, allContribRes, expenseRes, classRes]) => {
+    ]).then(([myContribRes, statusRes, expenseRes, classRes]) => {
       const contributions = (myContribRes.data ?? []) as ContributionRow[]
-      const allContributions = allContribRes.data ?? []
+      const studentStatuses = (statusRes.data ?? []) as { student_id: string; total: number }[]
       const expenses = expenseRes.data ?? []
       const classData = classRes.data as { contribution_target: number } | null
 
       const personalTotal = contributions.reduce((s, c) => s + Number(c.amount), 0)
-      const classTotal = allContributions.reduce((s, c) => s + Number(c.amount), 0)
+      const classTotal = studentStatuses.reduce((s, st) => s + Number(st.total), 0)
       const expenseTotal = expenses.reduce((s, e) => s + Number(e.amount), 0)
       const target = classData?.contribution_target ?? 0
       const status = personalTotal >= target ? 'paid' : personalTotal > 0 ? 'partial' : 'unpaid'
